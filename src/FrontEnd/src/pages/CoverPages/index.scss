@@ -1,0 +1,13 @@
+.login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: center/cover url('~@/assets/background.png');
+    .but {
+        color: aqua;
+        width: 200px; // 设置 Button 的宽度
+    }  
+}
+
+ 
