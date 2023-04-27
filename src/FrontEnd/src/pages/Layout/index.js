@@ -22,25 +22,20 @@ const GeekLayout = () => {
     channelStore.loadChannelList()
    }, [userStore,channelStore])
   const confirm = () => {
-    //退出登录
-    //删除token
-    //跳回到登录
     loginStore.loginOut()
     navigate('/login')
   };
   return (
     <Layout>
       <Header className="header">
-        <div className="logo" />
         <div className="user-info">
-          <span className="user-name">{userStore.userInfo.name}</span>
           <span className="user-logout">
             <Popconfirm 
             onConfirm={confirm}
-            title="是否确认退出？" 
-            okText="退出" 
-            cancelText="取消">
-              <LogoutOutlined /> 退出
+            title="Confirm to Exit"
+            okText="Exit"
+            cancelText="Cancel">
+              <LogoutOutlined /> Exit
             </Popconfirm>
           </span>
         </div>

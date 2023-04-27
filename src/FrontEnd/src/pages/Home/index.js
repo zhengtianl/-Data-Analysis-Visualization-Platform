@@ -7,14 +7,14 @@ const Home = () => {
             grid: { top: 8, right: 8, bottom: 24, left: 36 },
             xAxis: {
                 type: 'category',
-                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                data: ['positive', 'negative', 'neutral'],
             },
             yAxis: {
                 type: 'value',
             },
             series: [
                 {
-                    data: [820, 932, 901, 934, 1290, 1330, 1320],
+                    data: [820, 932, 901],
                     type: 'line',
                     smooth: true,
                 },
@@ -26,7 +26,7 @@ const Home = () => {
 
     return (
     <div className="home">
-      <Bar
+        <Bar
         style={{ width: '500px', height: '400px' }}
         xData={['positive', 'negative', 'neutral']}
         sData={[100000, 20000, 60000]}
@@ -38,9 +38,7 @@ const Home = () => {
         xData={['vue', 'angular', 'react']}
         sData={[50, 60, 70]}
         title='Area '/>
-
         <ReactEcharts option={options} />;
-
         <ReactEcharts
             option={{
                 tooltip: {
@@ -81,8 +79,6 @@ const Home = () => {
                 ]
             }}
         />
-
-
     </div>
   )
 }

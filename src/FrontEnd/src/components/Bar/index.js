@@ -24,8 +24,6 @@ function echartInit (node, xData, sData, title) {
 }
 
 function Bar ({ style, xData, sData, title }) {
-  // 1. 先不考虑传参问题  静态数据渲染到页面中
-  // 2. 把那些用户可能定制的参数 抽象props (1.定制大小 2.data 以及说明文字)
   const nodeRef = useRef(null)
   useEffect(() => {
     echartInit(nodeRef.current, xData, sData, title)
