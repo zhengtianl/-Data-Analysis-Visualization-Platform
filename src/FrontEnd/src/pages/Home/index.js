@@ -32,7 +32,6 @@ const Home = () => {
         sData={[100000, 20000, 60000]}
         title='Emotion statistics'/>
 
-
         <Bar
         style={{ width: '500px', height: '400px' }}
         xData={['vue', 'angular', 'react']}
