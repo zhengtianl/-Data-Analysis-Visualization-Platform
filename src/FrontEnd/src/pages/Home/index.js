@@ -2,6 +2,7 @@ import Bar from "@/components/Bar"
 import './index.scss'
 import React from 'react';
 import ReactEcharts  from 'echarts-for-react';
+
 const Home = () => {
         const options = {
             grid: { top: 8, right: 8, bottom: 24, left: 36 },
