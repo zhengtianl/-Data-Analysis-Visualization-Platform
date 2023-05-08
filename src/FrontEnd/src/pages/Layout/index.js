@@ -7,20 +7,13 @@ import {
 } from '@ant-design/icons'
 import './index.scss'
 import { Outlet, Link, useLocation,useNavigate } from 'react-router-dom'
-import { useStore } from '@/store'
-import { useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 const { Header, Sider } = Layout
 
 const GeekLayout = () => {
   const { pathname } = useLocation()
-  const { userStore, channelStore } = useStore()
   const navigate = useNavigate()
   //console.log(pathname)
-  useEffect(() => {
-    userStore.getUserInfo() 
-    channelStore.loadChannelList()
-   }, [userStore,channelStore])
   const confirm = () => {
     navigate('/login')
   };

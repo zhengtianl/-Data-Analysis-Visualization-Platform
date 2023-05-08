@@ -1,0 +1,5 @@
+couchdb
+flask
+flask_cors
+gunicorn
+requests

@@ -21,7 +21,7 @@ function Login() {
 
 
   async function onFinish() {
-    navigate('/', { replace: true });
+    navigate('/home', { replace: true });
   }
 
   return (

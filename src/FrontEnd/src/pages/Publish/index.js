@@ -22,7 +22,7 @@ const Publish = () => {
     <div className="Covid-19">
       {data && (
         <div>
-          <h3>Positive: {data.positive}</h3>
+          <h3>Positive: {data.abbotsbury}</h3>
           <h3>Negative: {data.negative}</h3>
           <h3>Neutral: {data.neutral}</h3>
         </div>

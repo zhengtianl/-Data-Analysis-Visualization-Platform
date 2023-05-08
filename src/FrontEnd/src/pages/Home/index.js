@@ -1,10 +1,23 @@
 import Bar from "@/components/Bar"
 import './index.scss'
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import ReactEcharts  from 'echarts-for-react';
+import axios from "axios";
 
 const Home = () => {
-        const options = {
+    const [data, setData] = useState(null);
+    useEffect(() => {
+        axios.get('http://127.0.0.1:5000/api/home')
+            .then(response => {
+                setData(response.data);
+                console.log(response.data.negative);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }, []);
+
+    const options = {
             grid: { top: 8, right: 8, bottom: 24, left: 36 },
             xAxis: {
                 type: 'category',
@@ -15,7 +28,7 @@ const Home = () => {
             },
             series: [
                 {
-                    data: [820, 932, 901],
+                    data: [data.positive, data.negative, data.neutral],
                     type: 'line',
                     smooth: true,
                 },
