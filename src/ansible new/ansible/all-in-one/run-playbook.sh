@@ -1,0 +1,1 @@
+. ~/unimelb-comp90024-2023-grp-42-openrc.sh; ansible-playbook -vv -i inventory.yaml playbook.yaml | tee output.txt

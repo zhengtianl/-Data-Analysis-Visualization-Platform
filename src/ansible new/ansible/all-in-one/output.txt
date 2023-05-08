@@ -1,0 +1,36 @@
+ansible-playbook [core 2.14.5]
+  config file = None
+  configured module search path = ['/Users/weihaozhao/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /opt/homebrew/Cellar/ansible/7.5.0/libexec/lib/python3.11/site-packages/ansible
+  ansible collection location = /Users/weihaozhao/.ansible/collections:/usr/share/ansible/collections
+  executable location = /opt/homebrew/bin/ansible-playbook
+  python version = 3.11.3 (main, Apr  7 2023, 19:08:44) [Clang 13.0.0 (clang-1300.0.29.30)] (/opt/homebrew/Cellar/ansible/7.5.0/libexec/bin/python3.11)
+  jinja version = 3.1.2
+  libyaml = True
+No config file found; using defaults
+Skipping callback 'default', as we already have a stdout callback.
+Skipping callback 'minimal', as we already have a stdout callback.
+Skipping callback 'oneline', as we already have a stdout callback.
+
+PLAYBOOK: playbook.yaml ********************************************************
+1 plays in playbook.yaml
+
+PLAY [play1] *******************************************************************
+
+TASK [Gathering Facts] *********************************************************
+task path: /Users/weihaozhao/Documents/GitHub/comp90024groupwork/src/ansible new/ansible/all-in-one/playbook.yaml:1
+ok: [instance01]
+
+TASK [ping my hosts] ***********************************************************
+task path: /Users/weihaozhao/Documents/GitHub/comp90024groupwork/src/ansible new/ansible/all-in-one/playbook.yaml:4
+ok: [instance01] => {"changed": false, "ping": "pong"}
+
+TASK [print message] ***********************************************************
+task path: /Users/weihaozhao/Documents/GitHub/comp90024groupwork/src/ansible new/ansible/all-in-one/playbook.yaml:6
+ok: [instance01] => {
+    "msg": "hello fuzi"
+}
+
+PLAY RECAP *********************************************************************
+instance01                 : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
