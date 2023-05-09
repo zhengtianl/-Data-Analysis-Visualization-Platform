@@ -20,7 +20,7 @@ y_pred = knn.fit(new_X_train, new_Y_train).predict(new_X_test)
 totaltime = time.time() - starttime
 
 train_data = pd.read_csv("Train.csv", sep=',')
-test_data = pd.read_csv("Test.csv", sep=',')
+test_data = pd.read_json('sal.json')
 
 #separating instance and label for Train
 X_train_raw = [x[0] for x in train_data[['text']].values]
