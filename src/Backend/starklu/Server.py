@@ -1,10 +1,11 @@
 # 导入所需的模块和函数
 from flask import Flask, jsonify
 from flask_cors import CORS
-import json
+
 
 app = Flask(__name__)
 CORS(app)
+
 
 @app.route("/api/data", methods=["GET"])
 def read_data():
