@@ -28,7 +28,7 @@ const Home = () => {
             },
             series: [
                 {
-                    data: [data.positive, data.negative, data.neutral],
+                    data: [500, 600, 700],
                     type: 'line',
                     smooth: true,
                 },

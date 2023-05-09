@@ -1,17 +1,13 @@
 # 导入所需的模块和函数
 from flask import Flask, jsonify
 from flask_cors import CORS
-import couchdb
 import json
 
 app = Flask(__name__)
 CORS(app)
 
-couch = couchdb.Server('http://localhost:5984')
-db = couch['twitter_full']
-# 创建一个用于返回数据的接口
 @app.route("/api/data", methods=["GET"])
-def read_data(file_name):
+def read_data():
     city_dict = {}
     with open(file_name, 'r', encoding='utf-8') as file:
         sal_data = json.load(file)
