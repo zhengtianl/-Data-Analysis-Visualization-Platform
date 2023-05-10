@@ -1,23 +1,23 @@
 # Common vars
 availability_zone: melbourne-qh2-uom
-instance_image: 356ff1ed-5960-4ac2-96a1-0c0198e6a999
-instance_key_name: assignment-2
+instance_image: bbaf16f8-2484-48d7-b455-42209cc4b8d2
+instance_key_name: tek
 instance_flavor: uom.mse.2c9g
 
 # Volume
 volumes:
-  - vol_name: master-vol-1
-    vol_size: 120
-    device: /dev/vdb
-    mountpoint: /mnt/couchdb
-  - vol_name: worker-1-vol-1
-    vol_size: 120
-    device: /dev/vdb
-    mountpoint: /mnt/couchdb
-  - vol_name: worker-2-vol-1
-    vol_size: 120
-    device: /dev/vdb
-    mountpoint: /mnt/couchdb
+  - vol_name: master_vol
+    vol_size: 200
+    device: /dev/vdc
+  - vol_name: worker1_vol
+    vol_size: 100
+    device: /dev/vda
+  - vol_name: worker2_vol
+    vol_size: 100
+    device: /dev/vda
+  - vol_name: worker3_vol
+    vol_size: 100
+    device: /dev/vda
 
 
 # Security group
@@ -55,11 +55,11 @@ security_groups:
 
 # Instance
 instances:
-  - name: master
-    volumes: ['master-vol-1']
-  - name: worker-1
-    volumes: ['worker-1-vol-1']
-  - name: worker-2
-    volumes: ['worker-2-vol-1']
-  - name: harvester
-    volumes: []
+  - name: test1D
+    volumes: ['master_vol']
+  - name: worker1
+    volumes: ['worker1_vol']
+  - name: worker2
+    volumes: ['worker2_vol']
+  - name: worker3
+    volumes: ['worker3_vol']

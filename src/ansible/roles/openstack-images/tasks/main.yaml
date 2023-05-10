@@ -14,3 +14,4 @@
   ansible.builtin.debug:
     msg: "Image name: {{ item.name }}; Image id: {{ item.id }}"
   loop: '{{ image_facts }}'
+  when: item.name is defined
