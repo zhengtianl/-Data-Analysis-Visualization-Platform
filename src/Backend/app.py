@@ -29,8 +29,8 @@ def count():
 
 @app.route("/city_count", methods=["GET"])
 def city_count_amount():
-    city_count_dic = city_count(sal_data)
-    return city_count_dic
+    city_count_dict = city_count(sal_data)
+    return city_count_dict
 
 
 @app.route("/alcohol", methods=["GET"])
