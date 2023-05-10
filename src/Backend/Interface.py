@@ -45,6 +45,3 @@ def sentiment():
     sentiment_list = model(train_data, id_data)
     return jsonify({'sentiment_list': sentiment_list})
 
-
-if __name__ == '__main__':
-     app.run(host='0.0.0.0', port='5000', debug=True)
