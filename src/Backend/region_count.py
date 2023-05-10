@@ -5,7 +5,7 @@ import re
 import os
 import sys
 
-with open('./twitter-data-small.json', 'r', encoding='utf-8') as data_file:
+with open('twitter-data-small.json', 'r', encoding='utf-8') as data_file:
     id_data = json.load(data_file)
     
 def region_tweet_count(iddata, region):
