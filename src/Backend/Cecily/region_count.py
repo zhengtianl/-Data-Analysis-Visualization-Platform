@@ -1,7 +1,7 @@
 import json
 import pandas as pd
 import re
-from mpi4py import MPI
+# from mpi4py import MPI
 import os
 import sys
 
@@ -36,8 +36,5 @@ def region(id_data):
     return region_list
     
 
-
-output = region_tweet_count(id_data,['New South Wales, Australia'])
-region_list = region(id_data)
 
 

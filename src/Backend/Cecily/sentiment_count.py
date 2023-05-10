@@ -49,5 +49,3 @@ def model(train_data, id_data):
     #negative_count = result_df.count('negative')
     count = dict(collections.Counter(y_pred))
     return count
-
-print(model(train_data, id_data))
