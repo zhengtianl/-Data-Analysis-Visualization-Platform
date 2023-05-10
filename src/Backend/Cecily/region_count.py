@@ -27,8 +27,10 @@ def region_tweet_count(iddata, region):
 def region(id_data):
     region_list = []
     for i in id_data:
-        if i['includes']['places'][0]['full_name'] not in region_list:
-            region_list.append(i['includes']['places'][0]['full_name'])
+        full_name = i['includes']['places'][0]['full_name'] 
+        exact_name = full_name.lower().split(',')[0]
+        if exact_name not in region_list:
+            region_list.append(exact_name)
         else:
             continue
     return region_list
@@ -38,5 +40,4 @@ def region(id_data):
 output = region_tweet_count(id_data,['New South Wales, Australia'])
 region_list = region(id_data)
 
-print(output)
 
