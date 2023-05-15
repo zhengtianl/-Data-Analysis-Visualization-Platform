@@ -10,9 +10,9 @@
     - role: openstack-security-group
     - role: openstack-instance
 
-- hosts: MAIN_SERVERS
+- hosts: all
   vars_files:
-    - host_vars/nectar.yaml
+    - host_vars/couchdb.yaml
   gather_facts: true
   vars:
     - ansible_user: ubuntu
@@ -20,7 +20,7 @@
     - ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
 
   roles:
-    - role: openstack-volume-mount
+    - role: setup_couchdb
 
 
 - hosts: HARVESTER

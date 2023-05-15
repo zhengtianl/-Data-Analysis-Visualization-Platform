@@ -34,14 +34,12 @@
 - name: Add host
   ansible.builtin.add_host:
     name: '{{ item.openstack.public_v4 }}'
-    groups: HARVESTER
+    groups: team42
   loop: '{{ os_instance.results }}'
-  when: item.openstack is defined and item.openstack.name == "harvester"
+  when: item.openstack is defined
 
-# Add hosts to Ansible in-memory inventory
-- name: Add host
-  ansible.builtin.add_host:
-    name: '{{ item.openstack.public_v4 }}'
-    groups: MAIN_SERVERS
-  loop: '{{ os_instance.results }}'
-  when: item.openstack is defined and item.openstack.name != "harvester"
+  # Add hosts to Ansible in-memory inventory
+- name: Create inventory file
+  ansible.builtin.template:
+    src:  ./roles/openstack-instance/templates/hosts.j2
+    dest: ./inventory/hosts

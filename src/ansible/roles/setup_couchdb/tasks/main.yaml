@@ -1,0 +1,21 @@
+---
+
+- name: Pull couchdb image
+  become: yes
+  community.docker.docker_image:
+    name: "{{ couchdb_image }}"
+    source: pull
+
+- name: Start a couchdb container
+  become: yes
+  community.docker.docker_container:
+    name: "couchdb_{{ ansible_host }}"
+    image: "{{ couchdb_image }}"
+    state: started
+    ports:
+      - "{{couchdb_port}}:{{couchdb_port}}"
+    env:
+      COUCHDB_PASSWORD: "{{ couchdb_pass }}"
+      COUCHDB_USER: "{{ couchdb_user }}"
+      COUCHDB_SECRET: "{{ couchdb_cookie }}"
+      ERL_FLAGS: "-setcookie {{ couchdb_cookie }} -name couchdb@{{ ansible_host }}"

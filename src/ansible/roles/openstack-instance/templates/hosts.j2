@@ -1,0 +1,21 @@
+[Team42]
+{% for item in groups %}
+{{ item }}
+{% endfor %}
+
+[masternode]
+{{ groups.all[0] }}
+
+[slavenodes]
+{{ groups.all[1] }}
+{{ groups.all[2] }}
+{{ groups.all[3] }}
+
+[frontend]
+{{ groups.all[1] }}
+
+[backend]
+{{ groups.all[2] }}
+
+[couchdb]
+{{ groups.all[3] }}
