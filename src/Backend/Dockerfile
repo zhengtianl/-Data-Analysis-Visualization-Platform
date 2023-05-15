@@ -5,7 +5,7 @@ FROM python:3.8-slim-buster
 WORKDIR /app
 
 # 将应用程序添加到容器中
-COPY . .
+COPY starklu .
 
 # 安装应用程序所需的依赖项
 RUN pip install --no-cache-dir -r requirements.txt

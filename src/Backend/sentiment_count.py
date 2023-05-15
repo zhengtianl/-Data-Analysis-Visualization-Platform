@@ -9,10 +9,10 @@ import collections
 import matplotlib.pyplot as plt
 import json
 
-train_data = pd.read_csv("./Train.csv", sep=',')
+train_data = pd.read_csv("Train.csv", sep=',')
 test_data = pd.read_csv("Test.csv", sep=',')
 
-with open('./twitter-data-small.json', 'r', encoding='utf-8') as data_file:
+with open('twitter-data-small.json', 'r', encoding='utf-8') as data_file:
     id_data = json.load(data_file)
 
 def model(train_data, id_data):
@@ -49,5 +49,3 @@ def model(train_data, id_data):
     #negative_count = result_df.count('negative')
     count = dict(collections.Counter(y_pred))
     return count
-
-print(model(train_data, id_data))
