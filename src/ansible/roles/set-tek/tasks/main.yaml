@@ -1,0 +1,4 @@
+- name: Set file permissions
+  file:
+    path: tek.pem
+    mode: '0600'

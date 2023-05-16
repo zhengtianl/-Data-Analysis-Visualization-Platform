@@ -19,5 +19,3 @@
   ansible.builtin.pip:
     name: ['openstacksdk==0.36.2']
     state: latest
-
-
