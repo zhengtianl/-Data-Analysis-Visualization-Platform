@@ -5,6 +5,7 @@
 
   roles:
     - role: openstack-common
+    - role: set-tek
     - role: openstack-images
     - role: openstack-volume
     - role: openstack-security-group
@@ -12,6 +13,7 @@
 
 - hosts: all
   vars_files:
+    - host_vars/nectar.yaml
     - host_vars/couchdb.yaml
   gather_facts: true
   vars:
@@ -20,18 +22,5 @@
     - ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
 
   roles:
+    - role: install-dependencies
     - role: setup_couchdb
-
-
-- hosts: HARVESTER
-  vars_files:
-    - host_vars/harverster.yaml
-  gather_facts: true
-  vars:
-    - ansible_user: ubuntu
-    - ansible_ssh_private_key_file: tek.pem
-    - ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
-
-  roles:
-    - role: openstack-common
-    - role: openstack-setup

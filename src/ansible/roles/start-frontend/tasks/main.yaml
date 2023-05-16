@@ -1,0 +1,24 @@
+- name: create config directoru of frontend
+  become: yes
+  file: 
+    path: /home/ubuntu/comp90024/frontend/config
+    state: directory
+    mode: 0755
+
+- name: config frontend
+  become: yes
+  template:
+    src: ../FrontEnd/craco.config.js
+    dest: /home/ubuntu/comp90024/frontend/config/craco.config.js
+
+- name: shut down pre server
+  become: yes
+  shell: docker-compose down --rmi local
+  args:
+    chdir: /home/ubuntu/comp90024/frontend
+
+- name: start a new server
+  become: yes
+  shell: docker-compose up -d --build
+  args:
+    chdir: /home/ubuntu/comp90024/frontend
