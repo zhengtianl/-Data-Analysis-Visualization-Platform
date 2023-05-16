@@ -8,7 +8,7 @@ const Publish = () => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:5000/api/data')
+    axios.get('http://127.0.0.1:5000/sentiment')
       .then(response => {
         setData(response.data);
         console.log(response.data);
@@ -22,9 +22,9 @@ const Publish = () => {
     <div className="Covid-19">
       {data && (
         <div>
-          <h3>Positive: {data.abbotsbury}</h3>
-          <h3>Negative: {data.negative}</h3>
-          <h3>Neutral: {data.neutral}</h3>
+          <h3>Positive: {data.sentiment_list.negative}</h3>
+          <h3>Negative: {data.sentiment_list.positive}</h3>
+          <h3>Neutral: {data.sentiment_list.neutral}</h3>
         </div>
       )}
     </div>
