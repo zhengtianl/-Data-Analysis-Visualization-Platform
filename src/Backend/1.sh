@@ -1,2 +1,2 @@
-pip3 install -r .\requirement.txt
-python3 .\main.py
+pip3 install -r requirement.txt
+python3 app.py

@@ -5,16 +5,22 @@ import ReactEcharts  from 'echarts-for-react';
 import axios from "axios";
 
 const Home = () => {
-    const [data, setData] = useState(null);
+    const [negative, setNegative] = useState(null);
+    const [neutral, setNeutral] = useState(null);
+    const [positive, setPositive] = useState(null);
+  
     useEffect(() => {
-        axios.get('http://127.0.0.1:5000/api/home')
-            .then(response => {
-                setData(response.data);
-                console.log(response.data.negative);
-            })
-            .catch(error => {
-                console.log(error);
-            });
+      axios.get('http://127.0.0.1:5000/sentiment')
+        .then(response => {
+          const sentimentList = response.data.sentiment_list;
+          setNegative(sentimentList.negative);
+          setNeutral(sentimentList.neutral);
+          setPositive(sentimentList.positive);
+          console.log(sentimentList);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }, []);
 
     const options = {
@@ -28,7 +34,7 @@ const Home = () => {
             },
             series: [
                 {
-                    data: [500, 600, 700],
+                    data: [negative, neutral, positive],
                     type: 'line',
                     smooth: true,
                 },
@@ -45,13 +51,13 @@ const Home = () => {
         <Bar
         style={{ width: '500px', height: '400px' }}
         xData={['positive', 'negative', 'neutral']}
-        sData={[100000, 20000, 60000]}
+        sData={[positive, negative, neutral]}
         title='Emotion statistics'/>
 
         <Bar
         style={{ width: '500px', height: '400px' }}
         xData={['vue', 'angular', 'react']}
-        sData={[50, 60, 70]}
+        sData={[negative, negative, positive]}
         title='Area '/>
         <ReactEcharts option={options} />;
         <ReactEcharts
