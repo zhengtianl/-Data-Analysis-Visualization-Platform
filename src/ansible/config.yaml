@@ -5,11 +5,8 @@
 
   roles:
     - role: openstack-common
-<<<<<<< HEAD:src/ansible/config.yaml
     - role: set-tek
     - role: openstack-images
-=======
->>>>>>> 4fb820e8b50af7bdf126cf2bac3d04e29570c35e:src/ansible/nectar.yaml
     - role: openstack-volume
     - role: openstack-security-group
 
@@ -24,23 +21,5 @@
     - ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
 
   roles:
-<<<<<<< HEAD:src/ansible/config.yaml
     - role: install-dependencies
     - role: setup_couchdb
-=======
-    - role: setup_couchdb
-
-
-- hosts: test
-  vars_files:
-    - host_vars/harverster.yaml
-  gather_facts: true
-  vars:
-    - ansible_user: ubuntu
-    - ansible_ssh_private_key_file: tek.pem
-    - ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
-
-  roles:
-    - role: openstack-common
-    - role: openstack-setup
->>>>>>> 4fb820e8b50af7bdf126cf2bac3d04e29570c35e:src/ansible/nectar.yaml
