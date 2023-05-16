@@ -11,6 +11,12 @@
     src: ../FrontEnd/craco.config.js
     dest: /home/ubuntu/comp90024/frontend/config/craco.config.js
 
+- name: Download Docker Compose file
+  get_url:
+    url: http://example.com/path/to/docker-compose.yml
+    dest: /home/ubuntu/comp90024/frontend/docker-compose.yml
+    mode: 0644
+
 - name: shut down pre server
   become: yes
   shell: docker-compose down --rmi local
