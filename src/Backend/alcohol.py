@@ -40,5 +40,5 @@ def detect_alcohol(id_data, region):
     return true_count
 
 
-        
+print(detect_alcohol(id_data, ['australia','sydney']))
 
