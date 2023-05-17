@@ -1,10 +1,25 @@
+# only use twitter-data
 import re
 import json
+# import couchdb
+# server = couchdb.Server('http://172.26.133.182:5984/')
+# server.resource.credentials = ('admin', 'admin')  # 替换为实际的用户名和密码
+# db = server['mastodon_tiny']
+# all_docs = db.view('_all_docs', include_docs=True)
+# # 将文档转换为字典列表
+# doc_list = []
+# for row in all_docs:
+#     doc = row['doc']
+#     doc_dict = dict(doc)
+#     doc_list.append(doc_dict)
 
+# 打印转换后的列表
+# print(doc_list[1])
 
+   
 with open('twitter-data-small.json', 'r', encoding='utf-8') as data_file:
-    id_data = json.load(data_file)
-
+      id_data = json.load(data_file)
+# print(type(id_data[1]))
 def detect_alcohol(id_data, region):
     true_count= 0
     keywords = [
@@ -40,5 +55,5 @@ def detect_alcohol(id_data, region):
     return true_count
 
 
-        
+# print(detect_alcohol(, ['australia','sydney']))
 

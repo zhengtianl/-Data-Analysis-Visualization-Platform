@@ -6,8 +6,23 @@ from region_count import region_tweet_count, region
 from sentiment_count import model
 from alcohol import detect_alcohol
 from Server import city_count
+import couchdb
 app = Flask(__name__)
 CORS(app)
+
+server = couchdb.Server('http://172.26.133.182:5984/')
+server.resource.credentials = ('admin', 'admin')  
+db = server['mastodon_tiny']
+all_docs = db.view('_all_docs', include_docs=True)
+# 将文档转换为字典列表
+doc_list = []
+for row in all_docs:
+    doc = row['doc']
+    doc_dict = dict(doc)
+    doc_list.append(doc_dict)
+
+
+
 
 with open('twitter-data-small.json', 'r', encoding='utf-8') as data_file:
     id_data = json.load(data_file)
@@ -20,6 +35,14 @@ with open('Test.csv', 'r') as file:
 
 with open('sal.json', 'r', encoding='utf-8') as data_file:
     sal_data = json.load(data_file)
+
+@app.route("/authorid", methods=["GET"])
+def get_data_authorid():
+    view = db.view('_design/new/_view/authorid', group=True)
+    data = [row.value for row in view]
+    return data
+
+
 
 @app.route("/count", methods=["GET"])
 def count():
@@ -42,6 +65,6 @@ def alcohol():
 
 @app.route("/sentiment", methods=["GET"])
 def sentiment():
-    sentiment_list = model(train_data, id_data)
+    sentiment_list = model(train_data, doc_list)
     return jsonify({'sentiment_list': sentiment_list})
 

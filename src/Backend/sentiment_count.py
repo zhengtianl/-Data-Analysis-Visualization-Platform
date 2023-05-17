@@ -8,23 +8,31 @@ from sklearn.neighbors import KNeighborsClassifier
 import collections
 import matplotlib.pyplot as plt
 import json
+import couchdb
+
+server = couchdb.Server('http://172.26.133.182:5984/')
+server.resource.credentials = ('admin', 'admin')  # 替换为实际的用户名和密码
+db = server['mastodon_tiny']
+all_docs = db.view('_all_docs', include_docs=True)
+# 将文档转换为字典列表
+doc_list = []
+for row in all_docs:
+    doc = row['doc']
+    doc_dict = dict(doc)
+    doc_list.append(doc_dict)
 
 train_data = pd.read_csv("Train.csv", sep=',')
 test_data = pd.read_csv("Test.csv", sep=',')
-
-with open('twitter-data-small.json', 'r', encoding='utf-8') as data_file:
-    id_data = json.load(data_file)
 
 def model(train_data, id_data):
     #separating instance and label for Train
     X_train_raw = [x[0] for x in train_data[['text']].values]
     Y_train = [x[0] for x in train_data[['sentiment']].values]
     X_test_raw = []
-    for i in id_data:
-        # for j in region:
-        #     if i['includes']['places'][0]['full_name'] == j:
-        X_test_raw.append(i['data']['text'])
-    #Adjustment for BoW(change ngram_range)#
+    for i in range(len(id_data) - 1):
+        data = id_data[i]
+        if 'text' in data:
+            X_test_raw.append(data['text'])
     BoW_vectorizer_2 = CountVectorizer(analyzer = 'word',ngram_range =(1,2))
     #Build the feature set (vocabulary) and vectorise the Tarin dataset using BoW
     X_train_BoW_2 = BoW_vectorizer_2.fit_transform(X_train_raw)
