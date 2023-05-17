@@ -8,16 +8,16 @@ instance_flavor: uom.mse.2c9g
 volumes:
   - vol_name: master_vol
     vol_size: 200
-    device: /dev/vdc
+    device: /dev/vdb
   - vol_name: worker1_vol
     vol_size: 100
-    device: /dev/vda
+    device: /dev/vdb
   - vol_name: worker2_vol
     vol_size: 100
-    device: /dev/vda
+    device: /dev/vdb
   - vol_name: worker3_vol
     vol_size: 100
-    device: /dev/vda
+    device: /dev/vdb
 
 
 # Security group

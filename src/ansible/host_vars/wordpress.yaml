@@ -1,0 +1,12 @@
+---
+volumes:
+  - device: /dev/vdb
+    mountpoint: /data
+# Wordpress / MySQL
+wp_dir: wordpress
+database_name: wordpress
+database_user: wordpress
+database_password: wordpress
+mysql_root_password: "P@ssw0rd"
+
+ansible_user: ubuntu

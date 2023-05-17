@@ -9,11 +9,13 @@
     - role: openstack-images
     - role: openstack-volume
     - role: openstack-security-group
+    - role: openstack-instance
 
 - hosts: all
   vars_files:
     - host_vars/nectar.yaml
     - host_vars/couchdb.yaml
+    - host_vars/wordpress.yaml
   gather_facts: true
   vars:
     - ansible_user: ubuntu
@@ -22,4 +24,5 @@
 
   roles:
     - role: install-dependencies
-    - role: setup_couchdb
+    - role: wp_volume
+    - role: setup-docker
