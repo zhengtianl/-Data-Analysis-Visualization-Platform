@@ -3,7 +3,11 @@ import json
 import couchdb
 server = couchdb.Server('http://172.26.133.182:5984/')
 server.resource.credentials = ('admin', 'admin')  # 替换为实际的用户名和密码
-db = server['twitter_full']
+db = server['mastodon_tiny']
+all_docs = db.view('_all_docs', include_docs=True)
+for row in all_docs:
+    print(row.doc)
+     
 
 with open('twitter-data-small.json', 'r', encoding='utf-8') as data_file:
     id_data = json.load(data_file)
@@ -43,5 +47,5 @@ def detect_alcohol(id_data, region):
     return true_count
 
 
-print(detect_alcohol(id_data, ['australia','sydney']))
+#print(detect_alcohol(id_data, ['australia','sydney']))
 
