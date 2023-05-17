@@ -55,7 +55,7 @@ def model(train_data, id_data):
     y_pred = knn.fit(new_X_train, new_Y_train).predict(new_X_test)
     result_df = pd.DataFrame(y_pred)
     #negative_count = result_df.count('negative')
-    count = dict(collections.Countxer(y_pred))
+    count = dict(collections.Counter(y_pred))
     return count
 
 print(model(train_data, doc_list))
