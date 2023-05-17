@@ -15,6 +15,7 @@ server.resource.credentials = ('admin', 'admin')  # 替换为实际的用户名�
 db = server['twitter_full']
 
 
+
 with open('twitter-data-small.json', 'r', encoding='utf-8') as data_file:
     id_data = json.load(data_file)
 

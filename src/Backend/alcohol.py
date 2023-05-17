@@ -1,6 +1,9 @@
 import re
 import json
-
+import couchdb
+server = couchdb.Server('http://172.26.133.182:5984/')
+server.resource.credentials = ('admin', 'admin')  # 替换为实际的用户名和密码
+db = server['twitter_full']
 
 with open('twitter-data-small.json', 'r', encoding='utf-8') as data_file:
     id_data = json.load(data_file)
