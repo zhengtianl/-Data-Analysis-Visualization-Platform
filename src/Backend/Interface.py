@@ -11,7 +11,7 @@ app = Flask(__name__)
 CORS(app)
 
 server = couchdb.Server('http://172.26.133.182:5984/')
-server.resource.credentials = ('admin', 'admin')  # 替换为实际的用户名和密码
+server.resource.credentials = ('admin', 'admin')  
 db = server['twitter_full']
 
 
