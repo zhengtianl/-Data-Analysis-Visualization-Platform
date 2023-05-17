@@ -12,7 +12,15 @@ CORS(app)
 
 server = couchdb.Server('http://172.26.133.182:5984/')
 server.resource.credentials = ('admin', 'admin')  
-db = server['twitter_full']
+db = server['mastodon_tiny']
+all_docs = db.view('_all_docs', include_docs=True)
+# 将文档转换为字典列表
+doc_list = []
+for row in all_docs:
+    doc = row['doc']
+    doc_dict = dict(doc)
+    doc_list.append(doc_dict)
+
 
 
 
@@ -57,6 +65,6 @@ def alcohol():
 
 @app.route("/sentiment", methods=["GET"])
 def sentiment():
-    sentiment_list = model(train_data, id_data)
+    sentiment_list = model(train_data, doc_list)
     return jsonify({'sentiment_list': sentiment_list})
 
