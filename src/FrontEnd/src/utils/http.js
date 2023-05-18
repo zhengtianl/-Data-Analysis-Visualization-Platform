@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 const http = axios.create({
-  baseURL: 'http://127.0.0.1:5000/api/data',
-  timeout: 5000
+  baseURL: 'http://127.0.0.1:5000',
+  timeout: 100000
 })
 
 // 添加响应拦截器

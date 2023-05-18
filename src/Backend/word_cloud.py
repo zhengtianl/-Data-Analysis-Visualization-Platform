@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 import couchdb
 from nltk.corpus import stopwords
-nltk.download("stopwords")
+# nltk.download("stopwords")
 server = couchdb.Server('http://172.26.133.182:5984/')
 server.resource.credentials = ('admin', 'admin')  # 替换为实际的用户名和密码
 db = server['twitter_huge_loc_tiny']
