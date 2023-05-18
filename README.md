@@ -22,3 +22,7 @@
 3. Code review should be hosted every time before different branches merged to main.
 
 # Code Review Checklist
+1. [x] /sentiment
+2. [x] /alcohol
+3. [x] /count
+4. [x] /authorid
