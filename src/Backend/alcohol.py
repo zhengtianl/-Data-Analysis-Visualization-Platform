@@ -5,7 +5,7 @@ import couchdb
 
 server = couchdb.Server('http://172.26.133.182:5984/')
 server.resource.credentials = ('admin', 'admin')  # 替换为实际的用户名和密码
-db = server['twitter_huge_loc_tiny']
+db = server['twitter_huge_loc_f']
 all_docs = db.view('_all_docs', include_docs=True)
 # 将文档转换为字典列表
 doc_list = []
@@ -53,5 +53,5 @@ def detect_alcohol(id_data, region):
     return true_count
 
 
-#print(detect_alcohol(doc_list, ['melbourne']))
+# print(detect_alcohol(doc_list, ['melbourne']))
 

@@ -50,4 +50,4 @@ def word_cloud(doc_list):
     plt.savefig('wordcloud.png')
     return None
 
-word_cloud(doc_list)
+#word_cloud(doc_list)

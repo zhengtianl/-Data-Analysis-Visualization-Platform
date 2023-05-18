@@ -44,6 +44,11 @@ def get_data_authorid():
     return data
 
 
+# @app.route("/alcohol_map", methods=["GET"])
+# def get_data_alcohol():
+#     view = db.view('_design/new/_view/alcohol?group=true', group=True)
+#     data = [row.value for row in view]
+#     return data
 
 @app.route("/count", methods=["GET"])
 def count():
@@ -51,10 +56,11 @@ def count():
     tweet_count = region_tweet_count(doc_list, region_area)
     return jsonify({'region': region_area, 'count': tweet_count})
 
-@app.route("/city_count", methods=["GET"])
-def city_count_amount():
-    city_count_dict = city_count(sal_data)
-    return city_count_dict
+
+# @app.route("/city_count", methods=["GET"])
+# def city_count_amount():
+#     city_count_dict = city_count(sal_data)
+#     return city_count_dict
 
 
 @app.route("/alcohol", methods=["GET"])
@@ -68,6 +74,7 @@ def alcohol():
 def sentiment():
     sentiment_list = model(train_data, doc_list)
     return jsonify({'sentiment_list': sentiment_list})
+
 
 @app.route("/wordcloud", methods=["GET"])
 def wordcloud():

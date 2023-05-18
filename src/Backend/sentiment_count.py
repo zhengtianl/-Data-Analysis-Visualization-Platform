@@ -22,7 +22,7 @@ for row in all_docs:
     doc_dict = dict(doc)
     doc_list.append(doc_dict)
 
-print(len(doc_list))
+
 train_data = pd.read_csv("Train.csv", sep=',')
 test_data = pd.read_csv("Test.csv", sep=',')
 
@@ -61,4 +61,4 @@ def model(train_data, id_data):
     return count
 
 
-print(model(train_data, doc_list))
+#print(model(train_data, doc_list))
