@@ -23,8 +23,6 @@ for row in all_docs:
     doc_list.append(doc_dict)
 
 
-
-
 with open('twitter-data-small.json', 'r', encoding='utf-8') as data_file:
     id_data = json.load(data_file)
 
@@ -39,7 +37,8 @@ with open('sal.json', 'r', encoding='utf-8') as data_file:
 
 @app.route("/authorid", methods=["GET"])
 def get_data_authorid():
-    view = db.view('_design/new/_view/authorid', group=True)
+    TB = server['twitter_huge_loc_f']
+    view = TB.view('_design/new/_view/keywords', group=True)
     data = [row.value for row in view]
     return data
 

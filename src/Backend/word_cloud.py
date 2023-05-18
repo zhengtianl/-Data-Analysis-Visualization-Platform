@@ -43,11 +43,6 @@ def word_cloud(doc_list):
         if word not in stopwords_list:
             clean_words.append(word)
     clean_words_string = " ".join(clean_words)
-    wordcloud = WordCloud(background_color="white").generate(clean_words_string)
-    plt.figure(figsize = (12, 8))
-    plt.imshow(wordcloud)
-    plt.axis("off")
-    plt.savefig('wordcloud.png')
-    return None
+    
+    return clean_words_string
 
-#word_cloud(doc_list)
