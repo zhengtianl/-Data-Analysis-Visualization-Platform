@@ -23,6 +23,8 @@ for row in all_docs:
     doc_list.append(doc_dict)
 
 
+
+
 with open('twitter-data-small.json', 'r', encoding='utf-8') as data_file:
     id_data = json.load(data_file)
 
