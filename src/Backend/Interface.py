@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, send_file
 import json
 import pandas as pd
 from flask_cors import CORS
@@ -69,7 +69,7 @@ def sentiment():
     sentiment_list = model(train_data, doc_list)
     return jsonify({'sentiment_list': sentiment_list})
 
-# @app.route("/wordcloud", methods=["GET"])
-# def wordcloud():
-#     cloud_figure = word_cloud(doc_list)
-#     return jsonify({'image': cloud_figure})
+@app.route("/wordcloud", methods=["GET"])
+def wordcloud():
+    cloud_figure = 'wordcloud.png'
+    return send_file(cloud_figure, mimetype='image/png')

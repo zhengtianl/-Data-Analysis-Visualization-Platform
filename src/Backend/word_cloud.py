@@ -23,50 +23,13 @@ for row in all_docs:
     doc_dict = dict(doc)
     doc_list.append(doc_dict)
 
-# text_list = []
-# for i in doc_list:
-#     text = i['text']
-#     text_list.append(text)
-
-# text_str = ' '.join(text_list)
-# words = word_tokenize(text_str)
-# words_no_punc = []
-
-# for word in words:
-#     if word.isalpha():
-#         words_no_punc.append(word.lower())
-
-
-
-
-# #list of stopwords
-# stopwords_list = stopwords.words("english")
-# clean_words = []
-# #Iterate through the words_no_punc list and add non stopwords to the new clean_words list
-# for word in words_no_punc:
-#     if word not in stopwords_list:
-#         clean_words.append(word)
-
-# fdist = FreqDist(clean_words)
-
-# clean_words_string = " ".join(clean_words)
-
-# # #generating the wordcloud
-# wordcloud = WordCloud(background_color="white").generate(clean_words_string)
-
-# # #plot the wordcloud
-# plt.figure(figsize = (12, 12))
-# plt.imshow(wordcloud)
-
-# # #to remove the axis value
-# plt.axis("off")
-# plt.show()
 
 def word_cloud(doc_list):
     text_list = []
     for i in doc_list:
-        text = i['text']
-        text_list.append(text)
+        if 'text' in i:
+            text = i['text']
+            text_list.append(text)
     text_str = ' '.join(text_list)
     words = word_tokenize(text_str)
     words_no_punc = []
@@ -84,5 +47,7 @@ def word_cloud(doc_list):
     plt.figure(figsize = (12, 8))
     plt.imshow(wordcloud)
     plt.axis("off")
-    plt.show()
-    return plt
+    plt.savefig('wordcloud.png')
+    return None
+
+word_cloud(doc_list)

@@ -43,14 +43,15 @@ def detect_alcohol(id_data, region):
 
     for i in id_data:
         for j in region:
-            full_name = i['place']
-            exact_name = full_name.lower().split(',')[0]
-            if exact_name == j:
-                for keyword in keywords:
-                    if re.search(r'\b' + keyword + r'\b',i['text'] , re.IGNORECASE):
-                        true_count+=1
+            if 'place' in i:
+                full_name = i['place']
+                exact_name = full_name.lower().split(',')[0]
+                if exact_name == j:
+                    for keyword in keywords:
+                        if re.search(r'\b' + keyword + r'\b',i['text'] , re.IGNORECASE):
+                            true_count+=1
     return true_count
 
 
-print(detect_alcohol(doc_list, ['melbourne']))
+#print(detect_alcohol(doc_list, ['melbourne']))
 
