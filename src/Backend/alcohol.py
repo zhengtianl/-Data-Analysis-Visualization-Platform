@@ -53,5 +53,4 @@ def detect_alcohol(id_data, region):
     return true_count
 
 
-#print(detect_alcohol(doc_list, ['melbourne']))
 
