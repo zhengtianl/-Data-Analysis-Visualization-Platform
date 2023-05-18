@@ -12,7 +12,7 @@ CORS(app)
 
 server = couchdb.Server('http://172.26.133.182:5984/')
 server.resource.credentials = ('admin', 'admin')  
-db = server['mastodon_tiny']
+db = server['twitter_huge_loc_tiny']
 all_docs = db.view('_all_docs', include_docs=True)
 # 将文档转换为字典列表
 doc_list = []
@@ -46,8 +46,8 @@ def get_data_authorid():
 
 @app.route("/count", methods=["GET"])
 def count():
-    region_area = region(id_data)
-    tweet_count = region_tweet_count(id_data, region_area)
+    region_area = region(doc_list)
+    tweet_count = region_tweet_count(doc_list, region_area)
     return jsonify({'region': region_area, 'count': tweet_count})
 
 @app.route("/city_count", methods=["GET"])
@@ -58,8 +58,8 @@ def city_count_amount():
 
 @app.route("/alcohol", methods=["GET"])
 def alcohol():
-    region_area = region(id_data)
-    alcohol_count = detect_alcohol(id_data, region_area)
+    region_area = region(doc_list)
+    alcohol_count = detect_alcohol(doc_list, region_area)
     return jsonify({'region': region_area, 'alcohol_count': alcohol_count})
 
 

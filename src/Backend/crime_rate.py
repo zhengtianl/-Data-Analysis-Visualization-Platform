@@ -4,6 +4,21 @@ import re
 #import couchdb
 #from alcohol import detect_alcohol
 
+import couchdb
+
+server = couchdb.Server('http://172.26.133.182:5984/')
+server.resource.credentials = ('admin', 'admin')  
+db = server['twitter_huge_loc_tiny']
+all_docs = db.view('_all_docs', include_docs=True)
+# 将文档转换为字典列表
+doc_list = []
+for row in all_docs:
+    doc = row['doc']
+    doc_dict = dict(doc)
+    doc_list.append(doc_dict)
+
+print(doc_list)
+
 with open('crime_data.csv', 'r') as file:
     crime_data = pd.read_csv(file, sep=',')
 
@@ -36,14 +51,16 @@ def detect_alcohol(id_data, region):
 
     for i in id_data:
         for j in region:
-            full_name = i['includes']['places'][0]['full_name'] 
+            full_name = i['place']
             exact_name = full_name.lower().split(',')[0]
             if exact_name == j:
                 for keyword in keywords:
-                    if re.search(r'\b' + keyword + r'\b',i['data']['text'] , re.IGNORECASE):
+                    if re.search(r'\b' + keyword + r'\b',i['text'] , re.IGNORECASE):
                         true_count+=1
     return true_count
 
+
+#print(detect_alcohol(doc_list, ['melbourne']))
 
 
 def get_total_offences(suburb, data):
