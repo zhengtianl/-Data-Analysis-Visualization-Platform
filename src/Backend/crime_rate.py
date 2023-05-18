@@ -17,7 +17,7 @@ for row in all_docs:
     doc_dict = dict(doc)
     doc_list.append(doc_dict)
 
-print(doc_list)
+
 
 with open('crime_data.csv', 'r') as file:
     crime_data = pd.read_csv(file, sep=',')
@@ -63,23 +63,32 @@ def detect_alcohol(id_data, region):
 #print(detect_alcohol(doc_list, ['melbourne']))
 
 
-def get_total_offences(suburb, data):
+def get_total_offences(region, crime_data):
     # 将输入的郊区名称转换为小写，以便进行大小写不敏感的匹配
-    for i in suburb:
+    for i in region:
         one_suburb = i.lower()
     
         # 在 DataFrame 中进行筛选，并返回匹配的犯罪总数
-        filtered_data = data[data['SUBURB'].str.lower() == one_suburb]
+        filtered_data = crime_data[crime_data['SUBURB'].str.lower() == one_suburb]
         if not filtered_data.empty:
             filtered_data = dict(filtered_data)
             total_offence = sum(filtered_data['\xa0total_offences'])
-        num_alcohol = detect_alcohol(id_data, suburb)
-        rate = num_alcohol/total_offence
-        return rate
+            num_alcohol = detect_alcohol(doc_list, region)
 
+            rate = num_alcohol/total_offence
+            return rate
 
+def region(id_data):
+    region_list = []
+    for i in id_data:
+        full_name = i['place']
+        exact_name = full_name.lower().split(',')[0]
+        if exact_name not in region_list:
+            region_list.append(exact_name)
+        else:
+            continue
+    return region_list
 
+region_list = region(doc_list)
 
-
-
-print(get_total_offences(['NORTH HAVEN'], crime_data))
+print(get_total_offences(region_list, crime_data))

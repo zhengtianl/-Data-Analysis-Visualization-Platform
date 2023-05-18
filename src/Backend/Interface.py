@@ -6,6 +6,7 @@ from region_count import region_tweet_count, region
 from sentiment_count import model
 from alcohol import detect_alcohol
 from Server import city_count
+from word_cloud import word_cloud
 import couchdb
 app = Flask(__name__)
 CORS(app)
@@ -68,3 +69,7 @@ def sentiment():
     sentiment_list = model(train_data, doc_list)
     return jsonify({'sentiment_list': sentiment_list})
 
+# @app.route("/wordcloud", methods=["GET"])
+# def wordcloud():
+#     cloud_figure = word_cloud(doc_list)
+#     return jsonify({'image': cloud_figure})
