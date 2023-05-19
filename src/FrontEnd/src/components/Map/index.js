@@ -1,97 +1,114 @@
-import React, { useRef, useEffect, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
 
+import React, {useRef, useEffect, useState } from 'react';
+import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
+import { Layout, Button} from 'antd';
+import Hospital_Statistics from '@/data/Hospital_Statistics.json';
+import './Map.css';
+import Regions from '@/data/region_food_count.json';
+
+
+var staticLayers = [];
 mapboxgl.accessToken = 'pk.eyJ1IjoieWlmZXlhbmcxIiwiYSI6ImNrb251MG44ZzA0Njkyd3BweWFyMWJvcjYifQ.oEO3lpWd3GLwRu13euHIvA';
 
-function Map() {
-    const mapContainer = useRef(null);
-    const map = useRef(null);
-    const [lng, setLng] = useState(-122.4194);
-    const [lat, setLat] = useState(37.7749);
-    const [zoom, setZoom] = useState(10);
+export default function Map() {
+  var mapContainer = useRef(null);
+  var map = useRef(null);
+  const [lng, setLng] = useState(145.3607);
+  const [lat, setLat] = useState(-37.8636);
+  const [zoom, setZoom] = useState(7.96);
 
-    useEffect(() => {
-        if (map.current) return;
-        map.current = new mapboxgl.Map({
-            container: mapContainer.current,
-            style: 'mapbox://styles/mapbox/streets-v11',
-            center: [144.9631, -37.8136],
-            zoom: zoom
-        });
+  const aurinData = Hospital_Statistics.features;
+
+
+  const counts = Regions.features.map(region => {
+    return parseInt(region.properties.count);
+  });
+
+  const math = require("mathjs");
+  const maxCount = math.max(counts);
+  const minCount = math.min(counts);
+  const add = (maxCount - minCount) / 5;
+
+  useEffect(() => {
+    if (map.current) return; // initialize map only once
+    map.current = new mapboxgl.Map({
+      container: mapContainer.current,
+      style: 'mapbox://styles/yifeyang1/ckp41vh7i0pli19o3x6fe84jh/draft',
+      center: [lng, lat],
+      zoom: zoom
     });
+  });
 
-    useEffect(() => {
-        if (!map.current) return;
-        map.current.on('move', () => {
-            setLng(map.current.getCenter().lng.toFixed(4));
-            setLat(map.current.getCenter().lat.toFixed(4));
-            setZoom(map.current.getZoom().toFixed(2));
-        });
+  useEffect(() => {
+    if (!map.current) return; // wait for map to initialize
+    map.current.on('move', () => {
+      setLng(map.current.getCenter().lng.toFixed(4));
+      setLat(map.current.getCenter().lat.toFixed(4));
+      setZoom(map.current.getZoom().toFixed(2));
     });
+  });
 
-    useEffect(() => {
-        if (map.current) return;
-        map.current = new mapboxgl.Map({
-            container: mapContainer.current,
-            style: {
-                version: 8,
-                sources: {
-                    'my-data': {
-                        type: 'geojson',
-                        data: 'my-data.geojson'
-                    }
-                },
-                layers: [
-                    {
-                        id: 'my-data-layer',
-                        type: 'heatmap',
-                        source: 'my-data',
-                        paint: {
-                            'heatmap-weight': {
-                                property: 'density',
-                                type: 'exponential',
-                                stops: [
-                                    [0, 0],
-                                    [100, 1]
-                                ]
-                            },
-                            'heatmap-intensity': 1.5,
-                            'heatmap-color': [
-                                'interpolate',
-                                ['linear'],
-                                ['heatmap-density'],
-                                0, 'rgba(0, 0, 255, 0)',
-                                0.2, 'royalblue',
-                                0.4, 'cyan',
-                                0.6, 'lime',
-                                0.8, 'yellow',
-                                1, 'red'
-                            ],
-                            'heatmap-radius': {
-                                stops: [
-                                    [1, 10],
-                                    [6, 60]
-                                ]
-                            }
-                        }
-                    }
-                ]
-            },
-            center: [144.9631, -37.8136],
-            zoom: zoom
-        });
+
+
+  useEffect(() => {
+    map.current.on('load', () => {
+      map.current.loadImage('https://i.loli.net/2021/05/25/rdNiyRkwZWafj5x.png', function (error, image) {
+        if (error) throw error;
+        map.current.addImage('exclamation', image); //38x55px, shadow adds 5px
       });
-      
+
+      map.current.addSource('hospital_location', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: aurinData.map(hospital => {
+            return {
+              type: 'Feature',
+              geometry: {
+                type: 'Point',
+                coordinates: hospital.geometry.coordinates,
+              },
+            };
+          }),
+        },
+      });
+
+      map.current.addLayer({
+        'id': 'hospitals_loc',
+        'type': 'symbol',
+        'source': 'hospital_location',
+        'layout': {
+          // Make the layer visible by default.
+          'icon-image': 'exclamation',
+          'icon-size': 0.05,
+        },
+      });
+      staticLayers.push('hospitals_loc');
+    });
+  }, []);
+
+  const handleZoom = (action) => {
+    if (action === 'in') {
+      map.current.zoomIn();
+    } else if (action === 'out') {
+      map.current.zoomOut();
+    }
+  };
+  
 
 
-    return (
-        <div>
-            <div className="sidebar">
-                Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
-            </div>
-            <div ref={mapContainer} className="map-container" style={{ height: '800px' }} />
+  return (
+    <Layout style={{ minHeight: '200vh' }}>
+      <Layout>
+        <div className='sidebar'>
+          <div>Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}</div>
         </div>
-    );
+        <div ref={mapContainer} className="map-container" />
+        <div className="map-buttons">
+          <Button type='primary' onClick={() => handleZoom('in')}>Zoom In</Button>
+          <Button type='primary' onClick={() => handleZoom('out')}>Zoom Out</Button>
+        </div>
+      </Layout>
+    </Layout>
+  ); 
 }
-
-export default Map;
