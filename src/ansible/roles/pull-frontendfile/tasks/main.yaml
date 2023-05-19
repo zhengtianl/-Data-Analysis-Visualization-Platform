@@ -1,0 +1,11 @@
+- name: Copy frontend files to WordPress container
+  become: yes
+  copy:
+    src: ../Frontend
+    dest: /var/www/html
+
+- name: Restart WordPress
+  become: yes
+  shell: docker-compose restart wordpress
+  args:
+    chdir: /data/wordpress
