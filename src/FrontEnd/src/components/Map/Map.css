@@ -5,4 +5,8 @@
 .map-buttons button {
     margin-right: 10px;
   }
-  
+
+.legend{
+    color: blue;
+    margin-right: 10px;
+}

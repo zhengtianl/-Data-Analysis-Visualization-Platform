@@ -4,7 +4,7 @@ import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-load
 import { Layout, Button} from 'antd';
 import Hospital_Statistics from '@/data/Hospital_Statistics.json';
 import './Map.css';
-import Regions from '@/data/region_food_count.json';
+
 
 
 var staticLayers = [];
@@ -16,18 +16,6 @@ export default function Map() {
   const [lng, setLng] = useState(145.3607);
   const [lat, setLat] = useState(-37.8636);
   const [zoom, setZoom] = useState(7.96);
-
-  const aurinData = Hospital_Statistics.features;
-
-
-  const counts = Regions.features.map(region => {
-    return parseInt(region.properties.count);
-  });
-
-  const math = require("mathjs");
-  const maxCount = math.max(counts);
-  const minCount = math.min(counts);
-  const add = (maxCount - minCount) / 5;
 
   useEffect(() => {
     if (map.current) return; // initialize map only once
@@ -56,7 +44,7 @@ export default function Map() {
         if (error) throw error;
         map.current.addImage('exclamation', image); //38x55px, shadow adds 5px
       });
-
+      const aurinData = Hospital_Statistics.features;
       map.current.addSource('hospital_location', {
         type: 'geojson',
         data: {
@@ -100,6 +88,17 @@ export default function Map() {
   return (
     <Layout style={{ minHeight: '200vh' }}>
       <Layout>
+        <div className="legend">
+          <span className="legend-item">
+            <span className="legend-color" style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}></span>
+            <span className="legend-label">Less Happy</span>
+          </span>
+          <span className="legend-item">
+            <span className="legend-color" style={{ backgroundColor: 'rgba(1, 2, 3, 4)' }}></span>
+            <span className="legend-label">More Happy</span>
+          </span>
+        </div>
+
         <div className='sidebar'>
           <div>Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}</div>
         </div>

@@ -43,8 +43,8 @@ const GeekLayout = () => {
             <Menu.Item icon={<HomeOutlined />} key="/">
               <Link to={'/'}>Emotional</Link>
             </Menu.Item>
-            <Menu.Item icon={<DiffOutlined />} key="/article">
-              <Link to={'/article'}>Area</Link>
+            <Menu.Item icon={<DiffOutlined />} key="/map">
+              <Link to={'/map'}>Area</Link>
             </Menu.Item>
             <Menu.Item icon={<EditOutlined />} key="/publish">
               <Link to ={'/publish'}>Covid-19</Link>
