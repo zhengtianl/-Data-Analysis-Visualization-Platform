@@ -17,5 +17,10 @@ team42
 [backend]
 172.26.135.85
 
-[couchdb]
+[couchdb:children]
+masternode
+slaves
+
+[slaves]
+172.26.131.77
 172.26.130.13
