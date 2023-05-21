@@ -11,7 +11,7 @@ from sentiment_count import model
 from alcohol import detect_alcohol,region
 # from Server import city_count
 # from word_cloud import word_cloud
-from unemployment import get_total_unemployment,unemploy_list,detect_alcohol
+from unemployment import get_rate
 
 
 server = couchdb.Server('http://172.26.133.182:5984/')
@@ -123,7 +123,7 @@ def unemployment():
     for row in data_tweet['rows']:
         doc_list_tweet.append(row)
     region_list_tweet = region(doc_list_tweet)
-    unemployment_rate_tweet = get_total_unemployment(doc_list_tweet, region_list_tweet)
+    unemployment_rate_tweet = get_rate(doc_list_tweet, region_list_tweet)
     return jsonify({'unemploy_rate': unemployment_rate_tweet})
 
 

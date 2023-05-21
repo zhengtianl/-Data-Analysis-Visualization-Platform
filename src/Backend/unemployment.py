@@ -52,18 +52,27 @@ def detect_alcohol(doc_list, region):
 
 
 
-def get_total_unemployment(doc_list, region):
+def get_rate(doc_list, region):
+    rates = []  # 存储城市和rate的列表
     for i in region:
         one_suburb = i.lower()
         for item in unemploy_list:
             if item['lga_name16'].lower() == one_suburb:
-                total_umemployment = item['p_unemp_tot']
+                total_unemployment = item['p_unemp_tot']
                 num_alcohol = detect_alcohol(doc_list, one_suburb)
-                if num_alcohol == None:
+                if num_alcohol is None:
                     rate = 0
                 else:
-                    rate = num_alcohol/total_umemployment
-                return rate
+                    rate = num_alcohol / total_unemployment
+
+                # 将城市和rate添加到字典中
+                result = {
+                    'city': i,
+                    'rate': rate
+                }
+                rates.append(result)  # 将字典添加到列表中
+
+    return rates 
             
 
 def region(id_data):
@@ -78,8 +87,9 @@ def region(id_data):
                 continue
     return region_list
 
-region_list = region(doc_list)
-print(get_total_unemployment(doc_list, region_list))
+# def answer():
+#     region_list = region(doc_list)
+#     answer = get_total_unemployment(doc_list, region_list)
+#     return print(answer)
 
-
-
+# answer()
