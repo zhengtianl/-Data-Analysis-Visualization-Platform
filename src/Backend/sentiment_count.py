@@ -6,21 +6,24 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.neighbors import KNeighborsClassifier
 import collections
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import json
 import couchdb
+import requests
 
 server = couchdb.Server('http://172.26.133.182:5984/')
-server.resource.credentials = ('admin', 'admin')  # 替换为实际的用户名和密码
-
+server.resource.credentials = ('admin', 'admin')
 db = server['twitter_huge_loc_tiny']
-all_docs = db.view('_all_docs', include_docs=True)
+
+
+view_url = 'http://admin:admin@172.26.133.182:5984/twitter_huge_loc_tiny/_design/new/_view/idtextwithalcohol?reduce=false'
+response = requests.get(view_url, auth=('admin', 'admin'))
+data = response.json()
 # 将文档转换为字典列表
 doc_list = []
-for row in all_docs:
-    doc = row['doc']
-    doc_dict = dict(doc)
-    doc_list.append(doc_dict)
+for row in data['rows']:
+    doc_list.append(row)
+
 
 
 train_data = pd.read_csv("Train.csv", sep=',')
@@ -33,8 +36,8 @@ def model(train_data, id_data):
     X_test_raw = []
     for i in range(len(id_data) - 1):
         data = id_data[i]
-        if 'text' in data:
-            X_test_raw.append(data['text'])
+        if 'value' in data:
+            X_test_raw.append(data['value'])
     #print(len(X_test_raw))
     BoW_vectorizer_2 = CountVectorizer(analyzer = 'word',ngram_range =(2,2))
     #Build the feature set (vocabulary) and vectorise the Tarin dataset using BoW

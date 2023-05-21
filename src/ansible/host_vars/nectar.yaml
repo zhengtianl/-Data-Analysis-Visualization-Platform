@@ -31,8 +31,8 @@ security_groups:
   - name: assignment2_http
     description: "Demo security group for HTTP"
     protocol: tcp
-    port_range_min: 80
-    port_range_max: 80
+    port_range_min: 3000
+    port_range_max: 3005
     remote_ip_prefix: 0.0.0.0/0
   - name: assignment2_couchdb
     description: "Demo security group for CouchDB"

@@ -1,24 +1,46 @@
-- name: create config directory of frontend
+- name: Install Node.js and Yarn
   become: yes
-  file: 
-    path: /home/ubuntu/comp90024/frontend/config
+  apt:
+    name:
+      - nodejs
+      - yarn
+    state: latest
+
+
+- name: Create frontend directory
+  become: yes
+  file:
+    path: "/data/wordpress/frontend"
     state: directory
     mode: 0755
 
-- name: config frontend
+- name: Copy React files to frontend directory
   become: yes
-  template:
-    src: ../FrontEnd/craco.config.js
-    dest: /home/ubuntu/comp90024/frontend/config/craco.config.js
+  copy:
+    src: ../FrontEnd
+    dest: /data/wordpress/frontend
 
-- name: shut down pre server
+- name: Install frontend dependencies
   become: yes
-  shell: docker-compose down --rmi local
+  shell: yarn
   args:
-    chdir: "{{ wp_dir }}"
+    chdir: /data/wordpress/frontend/FrontEnd
 
-- name: start a new server
+
+- name: Build frontend
   become: yes
-  shell: docker-compose up -d --build
+  shell: yarn start
   args:
-    chdir: "{{ wp_dir }}"
+    chdir: /data/wordpress/frontend/FrontEnd
+
+- name: Copy built files to WordPress container
+  become: yes
+  copy:
+    src: /data/wordpress/frontend/FrontEnd/build
+    dest: /var/www/html
+
+- name: Restart WordPress
+  become: yes
+  shell: docker-compose restart wordpress
+  args:
+    chdir: /data/wordpress

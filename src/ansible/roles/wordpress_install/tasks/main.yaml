@@ -1,0 +1,61 @@
+- name: Install Apache web server
+  become: true
+  ansible.builtin.apt:
+    name: apache2
+    state: present
+
+- name: Install PHP
+  become: true
+  ansible.builtin.apt:
+    name: php
+    state: present
+
+- name: Install MySQL client
+  become: true
+  ansible.builtin.apt:
+    name: mysql-client
+    state: present
+
+- name: Install WordPress
+  become: true
+  ansible.builtin.unarchive:
+    src: "https://wordpress.org/latest.tar.gz"
+    dest: /var/www/html/
+    remote_src: yes
+
+- name: Download WP-CLI Phar archive
+  become: true
+  ansible.builtin.get_url:
+    url: "https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar"
+    dest: "/usr/local/bin/wp"
+    mode: "0755"
+
+- name: Update package cache
+  become: true
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install WordPress Command Line Tool
+  shell: |
+    wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+    chmod +x wp-cli.phar
+    sudo mv wp-cli.phar /usr/local/bin/wp
+  become: true
+
+
+
+- name: Configure WordPress database
+  become: true
+  ansible.builtin.shell: |
+    wp config create --dbname=your_database_name --dbuser=your_database_user --dbpass=your_database_password --dbhost=your_database_host
+  args:
+    executable: /bin/bash
+    creates: /var/www/html/wp-config.php
+
+- name: Set up WordPress database
+  become: true
+  ansible.builtin.shell: |
+    wp core install --url=your_wordpress_url --title=your_wordpress_title --admin_user=your_admin_username --admin_password=your_admin_password --admin_email=your_admin_email
+  args:
+    executable: /bin/bash
+    creates: /var/www/html/wp-config.php

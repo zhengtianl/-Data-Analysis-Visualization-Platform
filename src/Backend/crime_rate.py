@@ -1,94 +1,68 @@
 import json
 import pandas as pd
 import re
-#import couchdb
-#from alcohol import detect_alcohol
-
 import couchdb
+import csv
+import requests
 
 server = couchdb.Server('http://172.26.133.182:5984/')
-server.resource.credentials = ('admin', 'admin')  
-db = server['twitter_huge_loc_tiny']
-all_docs = db.view('_all_docs', include_docs=True)
-# 将文档转换为字典列表
+server.resource.credentials = ('admin', 'admin')
+db = server['twitter_huge_loc_f']
+
+
+view_url = 'http://172.26.133.182:5984/twitter_huge_loc_f/_design/new/_view/keywords?group=true'
+response = requests.get(view_url, auth=('admin', 'admin'))
+data = response.json()
+
+
 doc_list = []
-for row in all_docs:
-    doc = row['doc']
-    doc_dict = dict(doc)
-    doc_list.append(doc_dict)
+for row in data['rows']:
+    doc_list.append(row)
 
 
 
-with open('crime_data.csv', 'r') as file:
-    crime_data = pd.read_csv(file, sep=',')
+unemploy_list = []
+with open('unemploy.csv', 'r') as csvfile:
+    reader = csv.DictReader(csvfile)
+    for row in reader:
+        dictionary = {
+            "p_unemp_tot": int(row["p_unemp_tot"]),
+            "lga_name16": str(row[" lga_name16"])
+        }
+        unemploy_list.append(dictionary)
 
-with open('twitter-data-small.json', 'r', encoding='utf-8') as data_file:
-    id_data = json.load(data_file)
 
-def detect_alcohol(id_data, region):
-    true_count= 0
-    keywords = [
-    "beer", "wine", "whiskey", "vodka", "gin", "rum", "tequila", "brandy", "cider", "sake", "mezcal",
-    "liqueur", "champagne", "prosecco", "absinthe", "amaretto", "aperol", "baileys", "bourbon",
-    "campari", "cognac", "daiquiri", "drambuie", "frangelico", "grappa", "jägermeister", "kahlua",
-    "limoncello", "mead", "midori", "ouzo", "pimms", "port", "sambuca", "sherry", "sloe gin",
-    "soju", "spirits", "vermouth", "whisky", "white russian", "absolut", "bacardi", "beefeater",
-    "captain morgan", "cuervo", "disaronno", "glenfiddich", "grey goose", "hennessy", "jim beam",
-    "johnnie walker", "martini", "moët & chandon", "patrón", "pernod", "seagrams", "smirnoff",
-    "southern comfort", "stolichnaya", "tia maria", "wild turkey", "woodford reserve", "heineken",
-    "corona", "guinness", "budweiser", "carlsberg", "modelo", "pilsner urquell", "sierra nevada",
-    "stella artois", "asahi", "sapporo", "kirin", "tsingtao", "tiger beer", "san miguel", "chang beer",
-    "singha beer", "yanjing beer", "bia hoi", "bia saigon", "bia ha noi", "bia 333", "bia larue", 
-    "bia huda", "bia tiger", "bia 333", "bia truc bach", "bia halida", "bia hue", "bia da", "bia tuoi",
-    "bia zorok", "bia phap", "bia bavaria", "bia hoegaarden", "bia tiger crystal", "bia 333 export",
-    "bia leffe", "bia cuu long", "bia ba ba", "bia saigon special", "bia tiger fresh", "bia heineken 0.0",
-    "bia sagota", "bia sai gon 9", "bia tuyp", "bia sai gon special export", "bia ha noi premium", 
-    "bia hanoi", "bia hanoi beer", "bia hanoi gold", "bia saigon premium", "bia ho chi minh", 
-    "bia ho chi minh city", "bia sài gòn tôm tắc", "bia tiger black", "bia ha noi dark", 
-    "bia huda gold", "bia saigon special chill", "bia saigon red", "bia hanoi red", "bia tay", 
-    "bia bia", "bia busch", "bia corona", "bia clara", "bia estrella", "bia gallo", "bia mahou", 
-    "bia polar", "bia poker", "bia polar ice"]
 
-    for i in id_data:
+for item in unemploy_list:
+    city_name = item['lga_name16']
+    start_index = city_name.find('(')
+    if start_index != -1:
+        city_name = city_name[:start_index].strip()
+    item['lga_name16'] = city_name
+
+
+
+def detect_alcohol(doc_list, region):
+    for i in doc_list:
         for j in region:
-            full_name = i['place']
+            full_name = i['key']
             exact_name = full_name.lower().split(',')[0]
-            if exact_name == j:
-                for keyword in keywords:
-                    if re.search(r'\b' + keyword + r'\b',i['text'] , re.IGNORECASE):
-                        true_count+=1
+            if exact_name == j.lower():
+                true_count = i['value']
     return true_count
 
 
-#print(detect_alcohol(doc_list, ['melbourne']))
 
-
-def get_total_offences(region, crime_data):
-    # 将输入的郊区名称转换为小写，以便进行大小写不敏感的匹配
+def get_total_offences(region):
     for i in region:
         one_suburb = i.lower()
-    
-        # 在 DataFrame 中进行筛选，并返回匹配的犯罪总数
-        filtered_data = crime_data[crime_data['SUBURB'].str.lower() == one_suburb]
-        if not filtered_data.empty:
-            filtered_data = dict(filtered_data)
-            total_offence = sum(filtered_data['\xa0total_offences'])
-            num_alcohol = detect_alcohol(doc_list, region)
+        for item in unemploy_list:
+            if item['lga_name16'].lower() in region:
+                total_umemployment = item['p_unemp_tot']
+                num_alcohol = detect_alcohol(doc_list, region)
+                rate = num_alcohol/total_umemployment
+                return rate
 
-            rate = num_alcohol/total_offence
-            return rate
+print(get_total_offences(['cairns']))
 
-def region(id_data):
-    region_list = []
-    for i in id_data:
-        full_name = i['place']
-        exact_name = full_name.lower().split(',')[0]
-        if exact_name not in region_list:
-            region_list.append(exact_name)
-        else:
-            continue
-    return region_list
 
-region_list = region(doc_list)
-
-print(get_total_offences(region_list, crime_data))
