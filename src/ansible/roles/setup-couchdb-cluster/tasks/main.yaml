@@ -1,0 +1,55 @@
+- name: create couchdb cluster on masternode
+  become: yes
+  uri:
+    url: "http://{{ groups['masternode'][0] }}:{{couchdb_port}}/team_42"
+    method: POST
+    user: "{{ couchdb_user }}"
+    password: "{{ couchdb_pass }}"
+    body:
+      action: enable_cluster
+      bind_address: 0.0.0.0
+      username: "{{ couchdb_user }}"
+      password: "{{ couchdb_pass }}"
+      port: "{{couchdb_port}}"
+      remote_node: "{{ item }}"
+      node_count: "{{ groups['couchdb'] | length }}"
+      remote_current_user: "{{ couchdb_user }}"
+      remote_current_password: "{{ couchdb_pass }}"
+    body_format: json
+    status_code: 202
+    force_basic_auth: yes
+  loop: "{{ groups['slaves'] }}"
+  register: enable_cluster_result
+
+- name: Add workers to the cluster
+  become: yes
+  uri:
+    url: "http://{{ inventory_hostname }}:5984/team_42"
+    method: POST
+    user: "{{ couchdb_user }}"
+    password: "{{ couchdb_pass }}"
+    body:
+      action: add_node
+      host: "{{ item }}"
+      port: "5984"
+      username: "{{ couchdb_user }}"
+      password: "{{ couchdb_pass }}"
+    body_format: json
+    status_code: 202
+    force_basic_auth: yes
+  loop: "{{ groups['slaves'] }}"
+  register: add_node_result
+
+- name: Finish cluster setup
+  become: yes
+  uri:
+    url: "http://{{ groups['masternode'][0] }}:5984/team_42"
+    method: POST
+    user: "{{ couchdb_user }}"
+    password: "{{ couchdb_pass }}"
+    body:
+      action: finish_cluster
+    body_format: json
+    status_code: 202
+    force_basic_auth: yes
+  register: finish_cluster_result

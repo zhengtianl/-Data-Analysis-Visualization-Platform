@@ -17,5 +17,10 @@
 [backend]
 {{ groups.all[2] }}
 
-[couchdb]
+[couchdb:children]
+masternode
+slaves
+
+[slaves]
+{{ groups.all[1] }}
 {{ groups.all[3] }}
