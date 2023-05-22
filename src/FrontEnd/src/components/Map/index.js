@@ -2,12 +2,10 @@
 import React, {useRef, useEffect, useState } from 'react';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import { Layout, Button} from 'antd';
-import Hospital_Statistics from '@/data/Hospital_Statistics.json';
 import './Map.css';
 
 
 
-var staticLayers = [];
 mapboxgl.accessToken = 'pk.eyJ1IjoieWlmZXlhbmcxIiwiYSI6ImNrb251MG44ZzA0Njkyd3BweWFyMWJvcjYifQ.oEO3lpWd3GLwRu13euHIvA';
 
 export default function Map() {
@@ -36,45 +34,7 @@ export default function Map() {
     });
   });
 
-
-
-  useEffect(() => {
-    map.current.on('load', () => {
-      map.current.loadImage('https://i.loli.net/2021/05/25/rdNiyRkwZWafj5x.png', function (error, image) {
-        if (error) throw error;
-        map.current.addImage('exclamation', image); //38x55px, shadow adds 5px
-      });
-      const aurinData = Hospital_Statistics.features;
-      map.current.addSource('hospital_location', {
-        type: 'geojson',
-        data: {
-          type: 'FeatureCollection',
-          features: aurinData.map(hospital => {
-            return {
-              type: 'Feature',
-              geometry: {
-                type: 'Point',
-                coordinates: hospital.geometry.coordinates,
-              },
-            };
-          }),
-        },
-      });
-
-      map.current.addLayer({
-        'id': 'hospitals_loc',
-        'type': 'symbol',
-        'source': 'hospital_location',
-        'layout': {
-          // Make the layer visible by default.
-          'icon-image': 'exclamation',
-          'icon-size': 0.05,
-        },
-      });
-      staticLayers.push('hospitals_loc');
-    });
-  }, []);
-
+  
   const handleZoom = (action) => {
     if (action === 'in') {
       map.current.zoomIn();
