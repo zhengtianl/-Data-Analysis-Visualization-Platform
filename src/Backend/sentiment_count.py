@@ -20,11 +20,19 @@ with open('sentiment.json', 'r') as json_file:
     # Parse the JSON data
     data = json.loads(json_data)
 
+with open('mastodon.json', 'r') as json_file:
+    # Read the contents of the file
+    json_data = json_file.read()
+    # Parse the JSON data
+    data_mas = json.loads(json_data)
 
 doc_list = []
 for row in data['rows']:
      doc_list.append(row)
 
+doc_list_mas = []
+for row in data_mas['rows']:
+     doc_list_mas.append(row)
 
 unemploy_list = []
 with open('unemploy.csv', 'r') as csvfile:
@@ -80,4 +88,4 @@ def model(train_data, id_data):
     count = dict(collections.Counter(y_pred))
     return count
 
-# print(model(train_data, doc_list))
+# print(model(train_data, doc_list_mas))
