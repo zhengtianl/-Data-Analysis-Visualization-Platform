@@ -98,7 +98,7 @@ def get_data_alcohol():
     
     return jsonify({'alcohol_count_lga': alcohol_count_tweet,'lga_list': region_list_tweet})
 
-#model is too big to run
+#model is too big to run 1
 # @app.route("/sentiment", methods=["GET"])
 # def sentiment():
    
