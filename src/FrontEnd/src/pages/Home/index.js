@@ -14,10 +14,10 @@ const Home = () => {
     http
       .get('/sentiment')
       .then((response) => {
-        const sentimentList = response.sentiment_list;
-        setNegative(sentimentList.negative);
-        setNeutral(sentimentList.neutral);
-        setPositive(sentimentList.positive);
+        const sentimentDetectTweet = response.sentiment_detect_tweet;
+        setNegative(sentimentDetectTweet.negative);
+        setNeutral(sentimentDetectTweet.neutral);
+        setPositive(sentimentDetectTweet.positive);
       })
       .catch((error) => {
         console.log(error);
@@ -38,39 +38,39 @@ const Home = () => {
       </Draggable>
       <Draggable>
         <div className="chart-card">
-        <ReactEcharts
-        option={{
-            title:{
+          <ReactEcharts
+            option={{
+              title: {
                 text: 'Emotional Pie chart',
                 left: 'left',
                 top: 5
               },
-            series: [
-            {
-                name: 'Utilization',
-                type: 'pie',
-                radius: ['80%'],
-                avoidLabelOverlap: false,
-                label: {
-                show: false,
-                position: 'center'
-                },
-                emphasis: {
-                label: {
-                    show: true,
-                    fontSize: '30',
-                    fontWeight: 'bold'
+              series: [
+                {
+                  name: 'Utilization',
+                  type: 'pie',
+                  radius: ['80%'],
+                  avoidLabelOverlap: false,
+                  label: {
+                    show: false,
+                    position: 'center'
+                  },
+                  emphasis: {
+                    label: {
+                      show: true,
+                      fontSize: '30',
+                      fontWeight: 'bold'
+                    }
+                  },
+                  data: [
+                    { value: positive, name: 'positive' },
+                    { value: negative, name: 'negative' },
+                    { value: neutral, name: 'neutral' }
+                  ]
                 }
-                },
-                data: [
-                { value: positive, name: 'positive' },
-                { value: negative, name: 'negative' },
-                { value: neutral, name: 'neutral' },
-                ]
-            }
-            ]
-        }}
-        />
+              ]
+            }}
+          />
         </div>
       </Draggable>
     </div>

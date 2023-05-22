@@ -99,21 +99,21 @@ def get_data_alcohol():
     return jsonify({'alcohol_count_lga': alcohol_count_tweet,'lga_list': region_list_tweet})
 
 
-@app.route("/sentiment", methods=["GET"])
-def sentiment():
+# @app.route("/sentiment", methods=["GET"])
+# def sentiment():
    
-    doc_list = []
-    for row in data_senti['rows']:
-        doc_list.append(row)
-    doc_list_mas = []
-    for row in data_mas['rows']:
-        doc_list_mas.append(row)
-    sentiment_detect = model(train_data, doc_list)
-    totol_amount = len(doc_list)
-    sentiment_detect_mas = model(train_data, doc_list_mas)
-    totol_amount_mas = len(doc_list_mas)
-    return jsonify({'sentiment_detect_tweet': sentiment_detect, 'total_amount_tweet':totol_amount,
-                    'sentiment_detect_mas': sentiment_detect_mas, 'total_amount_mas':totol_amount_mas})
+#     doc_list = []
+#     for row in data_senti['rows']:
+#         doc_list.append(row)
+#     doc_list_mas = []
+#     for row in data_mas['rows']:
+#         doc_list_mas.append(row)
+#     sentiment_detect = model(train_data, doc_list)
+#     totol_amount = len(doc_list)
+#     sentiment_detect_mas = model(train_data, doc_list_mas)
+#     totol_amount_mas = len(doc_list_mas)
+#     return jsonify({'sentiment_detect_tweet': sentiment_detect, 'total_amount_tweet':totol_amount,
+#                     'sentiment_detect_mas': sentiment_detect_mas, 'total_amount_mas':totol_amount_mas})
 
 
 @app.route("/unemployment", methods=["GET"])

@@ -7,7 +7,7 @@ import Login from '@/pages/Login'
 import '@/App.css'
 import Map from './pages/Map'
 import Home from './pages/Home'
-import Publish from './pages/Publish'
+import Unemployment from './pages/Publish'
 import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom'
 // 配置路由规则
 function App() {
@@ -18,7 +18,7 @@ function App() {
               <Route path="/" element={<Layout />}>
               <Route index element={<Home/>} />
               <Route path="map" element={<Map />} />
-              <Route path="Publish" element={<Publish />} />
+              <Route path="Unemployment" element={<Unemployment />} />
             </Route>
             <Route path="/login" element={<Login/>}/>
         </Routes>
