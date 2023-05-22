@@ -10,22 +10,39 @@ import collections
 import json
 import couchdb
 import requests
-
-server = couchdb.Server('http://172.26.133.182:5984/')
-server.resource.credentials = ('admin', 'admin')
-db = server['ttt42']
+import csv
+import itertools
 
 
-view_url = 'http://admin:admin@172.26.133.182:5984/tttt42/_design/new/_view/sentiment?reduce=false'
-response = requests.get(view_url, auth=('admin', 'admin'))
-data = response.json()
-# 将文档转换为字典列表
+with open('sentiment.json', 'r') as json_file:
+    # Read the contents of the file
+    json_data = json_file.read()
+    # Parse the JSON data
+    data = json.loads(json_data)
+
 
 doc_list = []
 for row in data['rows']:
-    doc_list.append(row)
+     doc_list.append(row)
 
-print(doc_list[1])
+
+unemploy_list = []
+with open('unemploy.csv', 'r') as csvfile:
+    reader = csv.DictReader(csvfile)
+    for row in reader:
+        dictionary = {
+            "p_unemp_tot": int(row["p_unemp_tot"]),
+            "lga_name16": str(row[" lga_name16"])
+        }
+        unemploy_list.append(dictionary)
+
+for item in unemploy_list:
+    city_name = item['lga_name16']
+    start_index = city_name.find('(')
+    if start_index != -1:
+        city_name = city_name[:start_index].strip()
+    item['lga_name16'] = city_name
+
 train_data = pd.read_csv("Train.csv", sep=',')
 test_data = pd.read_csv("Test.csv", sep=',')
 
@@ -63,3 +80,4 @@ def model(train_data, id_data):
     count = dict(collections.Counter(y_pred))
     return count
 
+# print(model(train_data, doc_list))

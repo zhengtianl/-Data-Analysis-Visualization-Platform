@@ -4,20 +4,18 @@ import re
 import couchdb
 import csv
 import requests
+import itertools
 
-server = couchdb.Server('http://172.26.133.182:5984/')
-server.resource.credentials = ('admin', 'admin')
-db = server['test500']
-
-
-view_url = 'http://admin:admin@172.26.133.182:5984/test500/_design/try/_view/countkey2?reduce=false'
-response = requests.get(view_url, auth=('admin', 'admin'))
-data = response.json()
-
+with open('citycountkey.json', 'r') as json_file:
+    # Read the contents of the file
+    json_data = json_file.read()
+    # Parse the JSON data
+    data = json.loads(json_data)
 
 doc_list = []
 for row in data['rows']:
-    doc_list.append(row)
+     doc_list.append(row)
+
 
 
 unemploy_list = []
@@ -30,8 +28,6 @@ with open('unemploy.csv', 'r') as csvfile:
         }
         unemploy_list.append(dictionary)
 
-
-
 for item in unemploy_list:
     city_name = item['lga_name16']
     start_index = city_name.find('(')
@@ -41,55 +37,72 @@ for item in unemploy_list:
 
 
 
+
 def detect_alcohol(doc_list, region):
+    lst = []
     for i in doc_list:
         for j in region:
-            full_name = i['key']
-            exact_name = full_name.lower().split(',')[0]
-            if exact_name == j.lower():
-                true_count = i['value']['count']
-                return true_count
-
-
-
-def get_rate(doc_list, region):
-    rates = []  # 存储城市和rate的列表
-    for i in region:
-        one_suburb = i.lower()
-        for item in unemploy_list:
-            if item['lga_name16'].lower() == one_suburb:
-                total_unemployment = item['p_unemp_tot']
-                num_alcohol = detect_alcohol(doc_list, one_suburb)
-                if num_alcohol is None:
-                    rate = 0
-                else:
-                    rate = num_alcohol / total_unemployment
-
-                # 将城市和rate添加到字典中
-                result = {
-                    'city': i,
-                    'rate': rate
-                }
-                rates.append(result)  # 将字典添加到列表中
-
-    return rates 
+                full_name = i['key']
+                if full_name is not None:
+                    exact_name = full_name.lower().split(',')[0]
+                if exact_name == j.lower():
+                    true_count = i['value']['count']
+                    lst.append({'city': exact_name, 'count': true_count})
+    lst.sort(key=lambda x: x['city'])  # Sort by 'city' for grouping
+    grouped_lst = []
+    for city, group in itertools.groupby(lst, key=lambda x: x['city']):
+        count_list = [item['count'] for item in group]
+        total_count = sum(count_list)
+        grouped_lst.append({'city': city, 'count': total_count})
+    grouped_lst_sorted = sorted(grouped_lst, key=lambda x: x['count'], reverse=True)
             
+    return grouped_lst_sorted
+
+
 
 def region(id_data):
     region_list = []
     for i in id_data:
-        if i['key'] is not None:
-            full_name = i['key']
-            exact_name = full_name.lower().split(',')[0]
-            if exact_name not in region_list:
-                region_list.append(exact_name)
-            else:
-                continue
+        full_name = i['key']
+        exact_name = full_name.lower().split(',')[0]
+        for row in unemploy_list:
+            if exact_name == row['lga_name16'].lower().strip():
+                if exact_name not in region_list:
+                    region_list.append(exact_name)
+                else:
+                    continue
     return region_list
 
-# def answer():
-#     region_list = region(doc_list)
-#     answer = get_total_unemployment(doc_list, region_list)
-#     return print(answer)
 
-# answer()
+def get_rate(doc_list, region):
+    rates = []  
+    for suburb in region:
+        one_suburb = suburb.lower()
+        for item in unemploy_list:
+            if item['lga_name16'].lower() == one_suburb:
+                total_unemployment = item['p_unemp_tot']
+                alcohol_detect = detect_alcohol(doc_list, region)
+                for i in alcohol_detect:
+                    if i['city'] == one_suburb:
+                        num_alcohol = i['count']            
+                        if num_alcohol == 0 or total_unemployment == 0:
+                            rate = 0
+                        else:
+                            rate = num_alcohol / total_unemployment
+
+                        result = {
+                            'city': suburb,
+                            'rate': rate
+                        }
+                        rates.append(result)  
+    return rates
+
+            
+
+
+
+
+# region_list = region(doc_list)
+# print(get_rate(doc_list, region_list))
+# num_alcohol = detect_alcohol(doc_list, region_list)
+# print(type(num_alcohol[1]['count']))

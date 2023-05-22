@@ -10,42 +10,35 @@ import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 import couchdb
 from nltk.corpus import stopwords
-# nltk.download("stopwords")
 import requests
+import json
 
-server = couchdb.Server('http://172.26.133.182:5984/')
-server.resource.credentials = ('admin', 'admin')
-db = server['twitter_huge_loc_tiny']
+with open('sentiment.json', 'r') as json_file:
+    # Read the contents of the file
+    json_data = json_file.read()
+    # Parse the JSON data
+    data = json.loads(json_data)
 
 
-view_url = 'http://admin:admin@172.26.133.182:5984/twitter_huge_loc_tiny/_design/new/_view/idtextwithalcohol?reduce=false'
-response = requests.get(view_url, auth=('admin', 'admin'))
-data = response.json()
-# 将文档转换为字典列表
 doc_list = []
 for row in data['rows']:
-    doc_list.append(row)
+     doc_list.append(row)
+
+
 
 def word_cloud(doc_list):
-    text_list = []
-    for i in doc_list:
-        if 'value' in i:
-            text = i['value']
-            text_list.append(text)
+    stopwords_list = set(stopwords.words("english"))
+    stopwords_list.update(["https", 'amp', 'one'])
+
+    text_list = [i['value']['text'] for i in doc_list if 'value' in i]
     text_str = ' '.join(text_list)
+
     words = word_tokenize(text_str)
-    words_no_punc = []
-    for word in words:
-        if word.isalpha():
-            words_no_punc.append(word.lower())
-    stopwords_list = stopwords.words("english")
-    stopwords_list.extend(["https",'amp','one'])
-    clean_words = []
-    for word in words_no_punc:
-        if word not in stopwords_list:
-            clean_words.append(word)
+    words_no_punc = (word.lower() for word in words if word.isalpha())
+
+    clean_words = [word for word in words_no_punc if word not in stopwords_list]
     clean_words_string = " ".join(clean_words)
     
     return clean_words_string
 
-print(type(word_cloud(doc_list)))
+# print(word_cloud(doc_list))

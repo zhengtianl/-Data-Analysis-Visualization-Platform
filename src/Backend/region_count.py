@@ -4,66 +4,77 @@ import re
 # from mpi4py import MPI
 import os
 import sys
-
+import csv
 import couchdb
 import requests
+import itertools
 
-server = couchdb.Server('http://172.26.133.182:5984/')
-server.resource.credentials = ('admin', 'admin')
-db = server['tttt42']
+with open('view_results.json', 'r') as json_file:
+    # Read the contents of the file
+    json_data = json_file.read()
+    # Parse the JSON data
+    data = json.loads(json_data)
 
-
-view_url = 'http://172.26.133.182:5984/tttt42/_design/new/_view/citycount?group=true'
-response = requests.get(view_url, auth=('admin', 'admin'))
-data = response.json()
-
-# view_url_mastodon = 'http://admin:admin@172.26.133.182:5984/mas42_final/_design/new/_view/sentiment?reduce=false'
-# response_mas = requests.get(view_url_mastodon, auth=('admin', 'admin'))
-# data_mas = response_mas.json()
-# doc_list_mas = []
-# for row in data_mas['rows']:
-#     doc_list_mas.append(row)
 
 doc_list = []
 for row in data['rows']:
-    doc_list.append(row)
+     doc_list.append(row)
 
 
-def region_tweet_count(doc_list, region):
-    iddic = {}
+unemploy_list = []
+with open('unemploy.csv', 'r') as csvfile:
+    reader = csv.DictReader(csvfile)
+    for row in reader:
+        dictionary = {
+            "p_unemp_tot": int(row["p_unemp_tot"]),
+            "lga_name16": str(row[" lga_name16"])
+        }
+        unemploy_list.append(dictionary)
+
+for item in unemploy_list:
+    city_name = item['lga_name16']
+    start_index = city_name.find('(')
+    if start_index != -1:
+        city_name = city_name[:start_index].strip()
+    item['lga_name16'] = city_name
+
+
+def region_tweet_count(doc_list, region):       
+    lst = []
     for i in doc_list:
-        if 'key' in i:
-            full_name = i['key']
-            exact_name = full_name.lower()
-            if exact_name in region:
-                if exact_name in iddic:
-                    iddic[exact_name]['count'] += 1
-                else:
-                    iddic[exact_name] = {'count': 1, 'region': exact_name}
-    
-    sorted_dict = dict(sorted(iddic.items(), key=lambda x: x[1]['count'], reverse=True))
-    rank_items = list(sorted_dict.items())[:10]
-    return rank_items
-        
-    
-
+        for j in region:
+                full_name = i['key']
+                if full_name is not None:
+                    exact_name = full_name.lower().split(',')[0]
+                    if exact_name == j.lower():
+                        true_count = i['value']
+                        lst.append({'city': exact_name, 'count': true_count})
+    lst.sort(key=lambda x: x['city'])  # Sort by 'city' for grouping
+    grouped_lst = []
+    for city, group in itertools.groupby(lst, key=lambda x: x['city']):
+        count_list = [item['count'] for item in group]
+        total_count = sum(count_list)
+        grouped_lst.append({'city': city, 'count': total_count})
+    grouped_lst_sorted = sorted(grouped_lst, key=lambda x: x['count'], reverse=True)
+    return grouped_lst_sorted
 
 
 def region(id_data):
     region_list = []
     for i in id_data:
-        if i['key'] is not None:
-            full_name = i['key']
-            exact_name = full_name.lower().split(',')[0]
-            if exact_name not in region_list:
-                region_list.append(exact_name)
-            else:
-                continue
+        full_name = i['key']
+        exact_name = full_name.lower().split(',')[0]
+        for row in unemploy_list:
+            if exact_name == row['lga_name16'].lower().strip():
+                if exact_name not in region_list:
+                    region_list.append(exact_name)
+                else:
+                    continue
     return region_list
 
 
+
 # region_list = region(doc_list)
-# print(region_list)
 # print(region_tweet_count(doc_list, region_list))
 
 

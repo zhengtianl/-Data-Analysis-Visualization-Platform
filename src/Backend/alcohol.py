@@ -3,16 +3,15 @@ import re
 import json
 import couchdb
 import requests
+import csv
+import itertools
 
-server = couchdb.Server('http://172.26.133.182:5984/')
-server.resource.credentials = ('admin', 'admin')
-db = server['ttt42']
+with open('citycountkey.json', 'r') as json_file:
+    # Read the contents of the file
+    json_data = json_file.read()
+    # Parse the JSON data
+    data = json.loads(json_data)
 
-
-view_url = 'http://admin:admin@172.26.133.182:5984/tttt42/_design/new/_view/citycountkey?reduce=false'
-response = requests.get(view_url, auth=('admin', 'admin'))
-data = response.json()
-# 将文档转换为字典列表
 
 doc_list = []
 for row in data['rows']:
@@ -20,6 +19,22 @@ for row in data['rows']:
 
 
 
+unemploy_list = []
+with open('unemploy.csv', 'r') as csvfile:
+    reader = csv.DictReader(csvfile)
+    for row in reader:
+        dictionary = {
+            "p_unemp_tot": int(row["p_unemp_tot"]),
+            "lga_name16": str(row[" lga_name16"])
+        }
+        unemploy_list.append(dictionary)
+
+for item in unemploy_list:
+    city_name = item['lga_name16']
+    start_index = city_name.find('(')
+    if start_index != -1:
+        city_name = city_name[:start_index].strip()
+    item['lga_name16'] = city_name
 
 
 
@@ -28,30 +43,37 @@ def detect_alcohol(doc_list, region):
     lst = []
     for i in doc_list:
         for j in region:
-            if i['key'] is not None:
                 full_name = i['key']
                 if full_name is not None:
                     exact_name = full_name.lower().split(',')[0]
                 if exact_name == j.lower():
                     true_count = i['value']['count']
                     lst.append({'city': exact_name, 'count': true_count})
+    lst.sort(key=lambda x: x['city'])  # Sort by 'city' for grouping
+    grouped_lst = []
+    for city, group in itertools.groupby(lst, key=lambda x: x['city']):
+        count_list = [item['count'] for item in group]
+        total_count = sum(count_list)
+        grouped_lst.append({'city': city, 'count': total_count})
+    grouped_lst_sorted = sorted(grouped_lst, key=lambda x: x['count'], reverse=True)
             
-    return lst
+    return grouped_lst_sorted
 
 
 
 def region(id_data):
     region_list = []
     for i in id_data:
-        if i['key'] is not None:
-            full_name = i['key']
-            exact_name = full_name.lower().split(',')[0]
-            if exact_name not in region_list:
-                region_list.append(exact_name)
-            else:
-                continue
+        full_name = i['key']
+        exact_name = full_name.lower().split(',')[0]
+        for row in unemploy_list:
+            if exact_name == row['lga_name16'].lower().strip():
+                if exact_name not in region_list:
+                    region_list.append(exact_name)
+                else:
+                    continue
     return region_list
 
 
-region_list = region(doc_list)
-print(detect_alcohol(doc_list, region_list))
+# region_list = region(doc_list)
+# print(detect_alcohol(doc_list, region_list))
