@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OLD_EMAIL='starkfkworld@ravpn-266-1-student-10-8-43-73.uniaccess.unimelb.edu.au'
+OLD_EMAIL='starkfkworld@Zhengtians-MBP.hub'
 CORRECT_NAME='zhengtianl'
 CORRECT_EMAIL='458078290@qq.com'
 
