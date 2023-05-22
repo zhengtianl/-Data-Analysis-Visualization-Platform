@@ -6,10 +6,10 @@ import requests
 
 server = couchdb.Server('http://172.26.133.182:5984/')
 server.resource.credentials = ('admin', 'admin')
-db = server['test500']
+db = server['ttt42']
 
 
-view_url = 'http://admin:admin@172.26.133.182:5984/test500/_design/try/_view/countkey2?reduce=false'
+view_url = 'http://admin:admin@172.26.133.182:5984/tttt42/_design/new/_view/citycountkey?reduce=false'
 response = requests.get(view_url, auth=('admin', 'admin'))
 data = response.json()
 # 将文档转换为字典列表

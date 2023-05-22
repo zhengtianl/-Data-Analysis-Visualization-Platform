@@ -16,7 +16,7 @@ from unemployment import get_rate
 
 server = couchdb.Server('http://172.26.133.182:5984/')
 server.resource.credentials = ('admin', 'admin')
-db_twitter= server['test500']
+db_twitter= server['tttt42']
 db_mastodon = server['mas42_final']
 
 app = Flask(__name__)
@@ -54,7 +54,7 @@ with open('Test.csv', 'r') as file:
 
 @app.route("/rank", methods=["GET"])
 def get_total_unemployment():
-    view_url_tweet = 'http://admin:admin@172.26.133.182:5984/test500/_design/try/_view/countkey2?reduce=false'
+    view_url_tweet = 'http://172.26.133.182:5984/tttt42/_design/new/_view/citycount?group=true'
     response_tweet = requests.get(view_url_tweet, auth=('admin', 'admin'))
     data_tweet = response_tweet.json()
     doc_list_tweet = []
@@ -71,7 +71,7 @@ def get_total_unemployment():
     rank_tweet= region_tweet_count(doc_list_tweet, region_list_tweet)
     # region_list_mas = region(doc_list_mas) 
     # rank_mas= region_tweet_count(doc_list_mas, region_list_mas)
-    return jsonify({'rank_tweet': rank_tweet})
+    return jsonify({'rank_tweet': rank_tweet, 'list_city_count':doc_list_tweet})
 
 
 @app.route("/alcohol_detect", methods=["GET"])

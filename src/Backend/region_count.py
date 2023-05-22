@@ -10,10 +10,10 @@ import requests
 
 server = couchdb.Server('http://172.26.133.182:5984/')
 server.resource.credentials = ('admin', 'admin')
-db = server['test500']
+db = server['tttt42']
 
 
-view_url = 'http://admin:admin@172.26.133.182:5984/test500/_design/try/_view/countkey2?reduce=false'
+view_url = 'http://172.26.133.182:5984/tttt42/_design/new/_view/citycount?group=true'
 response = requests.get(view_url, auth=('admin', 'admin'))
 data = response.json()
 
@@ -32,15 +32,15 @@ for row in data['rows']:
 def region_tweet_count(doc_list, region):
     iddic = {}
     for i in doc_list:
-        for j in region:
-            if 'key' in i:
-                full_name = i['key']
-                exact_name = full_name.lower().split(',')[0]
-                if exact_name == j:
-                    if i['id'] in iddic.keys():
-                        iddic[i['id']]['count'] += 1
-                    else:
-                        iddic[i['id']] = {'count': 1, 'region': exact_name}
+        if 'key' in i:
+            full_name = i['key']
+            exact_name = full_name.lower()
+            if exact_name in region:
+                if exact_name in iddic:
+                    iddic[exact_name]['count'] += 1
+                else:
+                    iddic[exact_name] = {'count': 1, 'region': exact_name}
+    
     sorted_dict = dict(sorted(iddic.items(), key=lambda x: x[1]['count'], reverse=True))
     rank_items = list(sorted_dict.items())[:10]
     return rank_items
@@ -63,6 +63,7 @@ def region(id_data):
 
 
 # region_list = region(doc_list)
+# print(region_list)
 # print(region_tweet_count(doc_list, region_list))
 
 
