@@ -10,8 +10,8 @@ import './index.scss';
 
 const Unemployment = () => {
   const [alcoholCount, setAlcoholCount] = useState([]);
-  const [numberOfAlcoholCities, setNumberOfAlcoholCities] = useState(3);
-  const [numberOfUnemploymentCities, setNumberOfUnemploymentCities] = useState(3);
+  const [numberOfAlcoholCities, setNumberOfAlcoholCities] = useState(5);
+  const [numberOfUnemploymentCities, setNumberOfUnemploymentCities] = useState(5);
   const [rankTweet, setRankTweet] = useState([]);
   const [selectedCity, setSelectedCity] = useState('');
   const { Option } = Select;
@@ -89,35 +89,35 @@ const Unemployment = () => {
   
 
   return (
-    <div className="alcohol">
+    <div className="unemployment-and-alcohol">
       <div className="button-group">
-        <Button type="primary" style={{ marginBottom: '10px' }} block onClick={() => handleShowAllCities(1)}>
-          All top1
-        </Button>
-        <Button type="primary" style={{ marginBottom: '10px' }} block onClick={() => handleShowAllCities(3)}>
-          All top3
-        </Button>
         <Button type="primary" style={{ marginBottom: '10px' }} block onClick={() => handleShowAllCities(5)}>
           All top5
+        </Button>
+        <Button type="primary" style={{ marginBottom: '10px' }} block onClick={() => handleShowAllCities(10)}>
+          All top10
+        </Button>
+        <Button type="primary" style={{ marginBottom: '10px' }} block onClick={() => handleShowAllCities(15)}>
+          All top15
         </Button>
       </div>
       
       <Draggable>
         <div className="chart-card">
           <div>
-            <Button style={{ marginRight: '10px' }} onClick={() => handleShowAlcoholCities(1)}>
-              top1
-            </Button>
-            <Button style={{ marginRight: '10px' }} onClick={() => handleShowAlcoholCities(3)}>
-              top3
-            </Button>
             <Button style={{ marginRight: '10px' }} onClick={() => handleShowAlcoholCities(5)}>
               top5
+            </Button>
+            <Button style={{ marginRight: '10px' }} onClick={() => handleShowAlcoholCities(10)}>
+              top10
+            </Button>
+            <Button style={{ marginRight: '10px' }} onClick={() => handleShowAlcoholCities(15)}>
+              top15
             </Button>
           </div>
 
           <Bar
-            style={{ width: '500px', height: '300px' }}
+            style={{ width: '900px', height: '300px' }}
             xData={alcoholCount.map((item) => item.city)}
             sData={alcoholCount.map((item) => item.count)}
             title="Cities with the most alcohol mentioned"
@@ -128,18 +128,18 @@ const Unemployment = () => {
       <Draggable>
         <div className="chart-card">
           <div>
-            <Button style={{ marginRight: '10px' }} onClick={() => handleShowUnemploymentCities(1)}>
-              top1
-            </Button>
-            <Button style={{ marginRight: '10px' }} onClick={() => handleShowUnemploymentCities(3)}>
-              top3
-            </Button>
             <Button style={{ marginRight: '10px' }} onClick={() => handleShowUnemploymentCities(5)}>
               top5
             </Button>
+            <Button style={{ marginRight: '10px' }} onClick={() => handleShowUnemploymentCities(10)}>
+              top10
+            </Button>
+            <Button style={{ marginRight: '10px' }} onClick={() => handleShowUnemploymentCities(15)}>
+              top15
+            </Button>
           </div>
           <Bar
-            style={{ width: '500px', height: '300px' }}
+            style={{ width: '900px', height: '300px' }}
             xData={rankTweet.map((item) => item.city)}
             sData={rankTweet.map((item) => item.count)}
             title="Cities with the most tweets"
@@ -161,7 +161,7 @@ const Unemployment = () => {
             {selectedCity && (
               <div className="selected-value">
                 <Bar
-                  style={{ width: '500px', height: '300px' }}
+                  style={{ width: '900px', height: '300px' }}
                   xData={[selectedCity]} // Wrap the selectedCity value in an array
                   sData={[ratios[selectedCity] * 100]} // Wrap the ratios[selectedCity] value in an array
                   title="Alcohol tweets as a share of all tweets"
