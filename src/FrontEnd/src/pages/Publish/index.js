@@ -14,7 +14,6 @@ const Unemployment = () => {
   const [numberOfUnemploymentCities, setNumberOfUnemploymentCities] = useState(3);
   const [rankTweet, setRankTweet] = useState([]);
   const [selectedCity, setSelectedCity] = useState('');
-
   const { Option } = Select;
   const handleShowAlcoholCities = (num) => {
     setNumberOfAlcoholCities(num);
