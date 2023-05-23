@@ -5,8 +5,7 @@ import { http } from '@/utils/http'
 import React, { useEffect, useState } from 'react';
 import Draggable from 'react-draggable';
 import Bar from '@/components/Bar';
-import ReactEcharts from 'echarts-for-react';
-import { Button } from 'antd';
+import { Select, Button} from 'antd';
 import './index.scss';
 
 const Unemployment = () => {
@@ -14,7 +13,9 @@ const Unemployment = () => {
   const [numberOfAlcoholCities, setNumberOfAlcoholCities] = useState(3);
   const [numberOfUnemploymentCities, setNumberOfUnemploymentCities] = useState(3);
   const [rankTweet, setRankTweet] = useState([]);
+  const [selectedCity, setSelectedCity] = useState('');
 
+  const { Option } = Select;
   const handleShowAlcoholCities = (num) => {
     setNumberOfAlcoholCities(num);
   };
@@ -36,6 +37,7 @@ const Unemployment = () => {
         const sortedData = alcoholCountTweet.sort((a, b) => b.count - a.count);
         const topCities = sortedData.slice(0, numberOfAlcoholCities);
         setAlcoholCount(topCities);
+        
       })
       .catch((error) => {
         console.log(error);
@@ -54,62 +56,38 @@ const Unemployment = () => {
       });
   }, [numberOfAlcoholCities, numberOfUnemploymentCities]);
 
-  const getAlcoholChartData = () => {
-    return alcoholCount.map((item) => ({
-      name: 'Alcohol Mentioned',
-      value: item.count,
-      city: item.city,
-    }));
+  const alcoholCities = alcoholCount.map((item) => item.city);
+  const rankCities = rankTweet.map((item) => item.city);
+
+  const commonCities = alcoholCities.filter((city) => rankCities.includes(city));
+
+  const calculateRatios = () => {
+    const ratios = {};
+
+    commonCities.forEach((city) => {
+      const alcoholCityObject = alcoholCount.find((item) => item.city === city);
+      const rankCityObject = rankTweet.find((item) => item.city === city);
+  
+      if (alcoholCityObject && rankCityObject) {
+        const alcoholCount = alcoholCityObject.count;
+        const rankCount = rankCityObject.count;
+        const ratio = alcoholCount / rankCount;
+
+        ratios[city] = ratio;
+
+        
+      }
+    });
+
+    return ratios;
   };
 
-  const getUnemploymentChartData = () => {
-    return rankTweet.map((item) => ({
-      name: 'Unemployment Mentioned',
-      value: item.count,
-      city: item.city,
-    }));
-  };
+  const ratios = calculateRatios();
 
-  const getChartOptions = () => {
-    const alcoholData = getAlcoholChartData();
-    const unemploymentData = getUnemploymentChartData();
-
-    return {
-      tooltip: {
-        trigger: 'axis'
-      },
-      legend: {
-        data: ['Alcohol Mentioned', 'Unemployment Mentioned']
-      },
-      grid: {
-        width: '60%', // 调整图表的宽度
-        left: '20%' // 调整图表的位置
-      },
-      xAxis: {
-        type: 'category',
-        data: alcoholData.map((item) => item.city)
-      },
-      yAxis: {
-        type: 'value'
-      },
-      series: [
-        {
-          name: 'Alcohol Mentioned',
-          type: 'line',
-          stack: 'area',
-          areaStyle: {},
-          data: alcoholData.map((item) => item.value)
-        },
-        {
-          name: 'Unemployment Mentioned',
-          type: 'line',
-          stack: 'area',
-          areaStyle: {},
-          data: unemploymentData.map((item) => item.value)
-        }
-      ]
-    };
+  const handleChangeCity = (value) => {
+    setSelectedCity(value);
   };
+  
 
   return (
     <div className="unemployment-and-alcohol">
@@ -165,20 +143,37 @@ const Unemployment = () => {
             style={{ width: '500px', height: '300px' }}
             xData={rankTweet.map((item) => item.city)}
             sData={rankTweet.map((item) => item.count)}
-            title="Cities with the most unemployment mentioned"
+            title="Cities with the most tweets"
           />
         </div>
       </Draggable>
 
       <Draggable>
-        <div className="chart-card">
-          <ReactEcharts
-            option={getChartOptions()}
-          />
+      <div className="chart-card" title="Alcohol tweets as a share of all tweets">
+          <div className="select-container" title="Alcohol tweets as a share of all tweets">
+            <Select value={selectedCity} onChange={handleChangeCity} title="Alcohol tweets as a share of all tweets">
+              <Option value="">Select City</Option>
+              {Object.keys(ratios).map((city) => (
+                <Option value={city} key={city}>
+                  {city}
+                </Option>
+              ))}
+            </Select>
+            {selectedCity && (
+              <div className="selected-value">
+                <Bar
+                  style={{ width: '500px', height: '300px' }}
+                  xData={[selectedCity]} // Wrap the selectedCity value in an array
+                  sData={[ratios[selectedCity] * 100]} // Wrap the ratios[selectedCity] value in an array
+                  title="Alcohol tweets as a share of all tweets"
+                />
+              </div>
+            )}
+          </div>
         </div>
       </Draggable>
     </div>
   );
 };
 
-export default observer(Unemployment);
+export default observer(Unemployment); 
