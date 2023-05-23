@@ -15,12 +15,13 @@ function App() {
     <HistoryRouter history={history}>
       <div className="App">
         <Routes>
+        <Route path="/login" element={<Login/>}/>
               <Route path="/" element={<Layout />}>
               <Route index element={<Home/>} />
               <Route path="map" element={<Map />} />
               <Route path="Unemployment" element={<Unemployment />} />
             </Route>
-            <Route path="/login" element={<Login/>}/>
+            
         </Routes>
       </div>
     </HistoryRouter>

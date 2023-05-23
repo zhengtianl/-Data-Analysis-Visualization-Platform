@@ -89,7 +89,7 @@ const Unemployment = () => {
   
 
   return (
-    <div className="unemployment-and-alcohol">
+    <div className="alcohol">
       <div className="button-group">
         <Button type="primary" style={{ marginBottom: '10px' }} block onClick={() => handleShowAllCities(1)}>
           All top1
