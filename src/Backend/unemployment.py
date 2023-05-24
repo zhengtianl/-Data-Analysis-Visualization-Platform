@@ -75,7 +75,7 @@ def region(id_data):
 
 
 def get_rate(doc_list, region):
-    rates = []  
+    rates = []
     for suburb in region:
         one_suburb = suburb.lower()
         for item in unemploy_list:
@@ -84,18 +84,16 @@ def get_rate(doc_list, region):
                 alcohol_detect = detect_alcohol(doc_list, region)
                 for i in alcohol_detect:
                     if i['city'] == one_suburb:
-                        num_alcohol = i['count']            
-                        if num_alcohol == 0 or total_unemployment == 0:
-                            rate = 0
-                        else:
-                            rate = num_alcohol / total_unemployment
+                        num_alcohol = i['count']
 
                         result = {
                             'city': suburb,
-                            'rate': rate
+                            'total_unemployment': total_unemployment,
+                            'num_alcohol': num_alcohol
                         }
-                        rates.append(result)  
+                        rates.append(result)
     return rates
+
 
             
 
