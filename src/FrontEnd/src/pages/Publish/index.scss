@@ -1,25 +1,48 @@
-.covid-19 {
-  position: central;
-  .ql-container {
-    height: 400px !important;
-  }
+.unemployment-and-alcohol {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
 }
-
 
 .chart-card {
-  width: 60%;
+  width: 900px;
+  height: 400px;
+  margin: 10px;
+  padding: 10px;
+  background-color: #f0f0f0;
 }
 
+.button-group {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
 
+.button-group button {
+  margin-right: 10px;
+}
 
-.ant-upload-list {
-  .ant-upload-list-picture-card-container,
-  .ant-upload-select {
-    width: 146px;
-    height: 146px;
-  }
-  .bold {
-    font-weight: bold;
-  }
-  
+.chart-card .select-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.chart-card .select-container .ant-select {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.chart-card .selected-value {
+  display: flex;
+  justify-content: center;
+}
+
+.chart-card {
+  width: 1000px;
+  height: 500px;
+  margin: 10px;
+  padding: 10px;
+  background-color: #f0f0f0;
 }
