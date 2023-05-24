@@ -42,6 +42,20 @@ const Unemployment = () => {
         console.log(error);
       });
 
+
+    http
+      .get('/unemployment')
+      .then((response) => {
+        const alcoholCountTweet = response.alcohol_count_lga;
+        const sortedData = alcoholCountTweet.sort((a, b) => b.count - a.count);
+        const topCities = sortedData.slice(0, numberOfAlcoholCities);
+        setAlcoholCount(topCities);
+        
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    
     http
       .get('/rank')
       .then((response) => {
