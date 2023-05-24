@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
-import { Layout, Button } from 'antd';
+import { Layout} from 'antd';
 import './Map.css';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoieWlmZXlhbmcxIiwiYSI6ImNrb251MG44ZzA0Njkyd3BweWFyMWJvcjYifQ.oEO3lpWd3GLwRu13euHIvA';
@@ -50,65 +50,28 @@ export default function Map() {
                 coordinates: [144.9631, -37.8136] // Melbourne's coordinates
               }
             },
-
+            // Brisbane data
             {
-              "type": "Feature",
-              "properties": {
-                "intensity": 0.5 
+              type: 'Feature',
+              properties: {
+                intensity: 0.5 // Brisbane's intensity set to 0.5
               },
-              "geometry": {
-                "type": "Point",
-                "coordinates": [153.0251, -27.4698] //
+              geometry: {
+                type: 'Point',
+                coordinates: [153.0251, -27.4698] // Brisbane's coordinates
               }
             },
-
-
+            // Perth data
             {
-              "type": "Feature",
-              "properties": {
-                "intensity": 0.328 // 墨尔本的强度为0.8
+              type: 'Feature',
+              properties: {
+                intensity: 0.2 // Perth's intensity set to 0.2
               },
-              "geometry": {
-                "type": "Point",
-                "coordinates": [138.6535, -34.9353] //
+              geometry: {
+                type: 'Point',
+                coordinates: [115.8575, -31.9505] // Perth's coordinates
               }
-            },
-
-
-            {
-              "type": "Feature",
-              "properties": {
-                "intensity": 0.1
-              },
-              "geometry": {
-                "type": "Point",
-                "coordinates": [147.0229, -32.2176] //
-              }
-            },
-
-
-
-            {
-              "type": "Feature",
-              "properties": {
-                "intensity": 0.2 
-              },
-              "geometry": {
-                "type": "Point",
-                "coordinates": [115.8799, -31.9423] //
-              }
-            },
-
-            {
-              "type": "Feature",
-              "properties": {
-                "intensity": 0.3 // 墨尔本的强度为0.8
-              },
-              "geometry": {
-                "type": "Point",
-                "coordinates": [149.1499, -32.6516] //
-              }
-            },
+            }
           ]
         }
       });
@@ -151,13 +114,6 @@ export default function Map() {
     });
   });
 
-  const handleZoom = (action) => {
-    if (action === 'in') {
-      map.current.zoomIn();
-    } else if (action === 'out') {
-      map.current.zoomOut();
-    }
-  };
 
   return (
     <Layout style={{ minHeight: '200vh' }}>
@@ -173,14 +129,6 @@ export default function Map() {
           <div>Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}</div>
         </div>
         <div ref={mapContainer} className="map-container" />
-        <div className="map-buttons">
-          <Button type="primary" onClick={() => handleZoom('in')}>
-            Zoom In
-          </Button>
-          <Button type="primary" onClick={() => handleZoom('out')}>
-            Zoom Out
-          </Button>
-        </div>
       </Layout>
     </Layout>
   );
