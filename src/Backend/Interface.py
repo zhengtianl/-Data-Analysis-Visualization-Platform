@@ -150,10 +150,6 @@ def get_string():
     # clean_word_list_tweet = word_cloud(doc_list_tweet)
     return jsonify({'clean_word_list_mas':clean_word_list_mas})
 
-
-
-
-
 #test
 
 
