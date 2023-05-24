@@ -138,6 +138,22 @@ def unemployment():
     unemployment_rate_tweet = get_rate(doc_list_tweet, region_list_tweet)
     return jsonify({'unemploy_rate': unemployment_rate_tweet})
 
+@app.route("/wordcloud", methods=["GET"])
+def get_string():
+    doc_list_tweet = []
+    for row in data_all['rows']:
+        doc_list_tweet.append(row)
+    doc_list_mas = []
+    for row in data_mas['rows']:
+        doc_list_mas.append(row)
+    clean_word_list_mas = word_cloud(doc_list_mas)
+    # clean_word_list_tweet = word_cloud(doc_list_tweet)
+    return jsonify({'clean_word_list_mas':clean_word_list_mas})
+
+
+
+
+
 #test
 
 
