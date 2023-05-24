@@ -1,13 +1,11 @@
 ##Reference:
 ##https://medium.com/@siglimumuni/natural-language-processing-in-python-exploring-word-frequencies-with-nltk-918f33c1e4c3
 
-
+import nltk
 from nltk import word_tokenize
 from nltk.probability import FreqDist
 import urllib.request
-import nltk
-import matplotlib.pyplot as plt
-from wordcloud import WordCloud
+# from wordcloud import WordCloud
 import couchdb
 from nltk.corpus import stopwords
 import requests

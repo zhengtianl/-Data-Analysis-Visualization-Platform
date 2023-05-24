@@ -5,19 +5,23 @@ from flask_cors import CORS
 import couchdb
 import requests
 import csv
+# from nltk import word_tokenize
+# from nltk.probability import FreqDist
+import urllib.request
+
 
 from region_count import region_tweet_count
 from sentiment_count import model
 from alcohol import detect_alcohol,region
 # from Server import city_count
-# from word_cloud import word_cloud
+from word_cloud import word_cloud
 from unemployment import get_rate
 
 
-server = couchdb.Server('http://172.26.133.182:5984/')
-server.resource.credentials = ('admin', 'admin')
-db_twitter= server['tttt42']
-db_mastodon = server['mas42_final']
+# server = couchdb.Server('http://172.26.133.182:5984/')
+# server.resource.credentials = ('admin', 'admin')
+# db_twitter= server['tttt42']
+# db_mastodon = server['mas42_final']
 
 app = Flask(__name__)
 CORS(app)
@@ -88,11 +92,15 @@ def get_total_unemployment():
     doc_list_tweet = []
     for row in data_all['rows']:
         doc_list_tweet.append(row)
+    doc_list_mas = []
+    for row in data_mas['rows']:
+        doc_list_mas.append(row)
+    clean_word_list = word_cloud(doc_list_mas)
     region_list_tweet = region(doc_list_tweet) 
     rank_tweet= region_tweet_count(doc_list_tweet, region_list_tweet)
     # region_list_mas = region(doc_list_mas) 
     # rank_mas= region_tweet_count(doc_list_mas, region_list_mas)
-    return jsonify({'rank_tweet': rank_tweet,'region_list': region_list_tweet})
+    return jsonify({'rank_tweet': rank_tweet,'region_list': region_list_tweet, 'clean_word_list':clean_word_list})
 
 
 @app.route("/alcohol_detect", methods=["GET"])
