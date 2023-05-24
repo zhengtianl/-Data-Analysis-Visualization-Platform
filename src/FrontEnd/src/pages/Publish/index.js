@@ -55,6 +55,12 @@ const Unemployment = () => {
       });
   }, [numberOfAlcoholCities, numberOfUnemploymentCities]);
 
+
+  
+  
+  
+  
+  
   const alcoholCities = alcoholCount.map((item) => item.city);
   const rankCities = rankTweet.map((item) => item.city);
 
