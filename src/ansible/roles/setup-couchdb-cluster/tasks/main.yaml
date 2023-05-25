@@ -16,7 +16,7 @@
       remote_current_user: "{{ couchdb_user }}"
       remote_current_password: "{{ couchdb_pass }}"
     body_format: json
-    status_code: 202
+    status_code: 201
     force_basic_auth: yes
   loop: "{{ groups['slaves'] }}"
   register: enable_cluster_result
@@ -35,7 +35,7 @@
       username: "{{ couchdb_user }}"
       password: "{{ couchdb_pass }}"
     body_format: json
-    status_code: 202
+    status_code: 201
     force_basic_auth: yes
   loop: "{{ groups['slaves'] }}"
   register: add_node_result
@@ -50,6 +50,6 @@
     body:
       action: finish_cluster
     body_format: json
-    status_code: 202
+    status_code: 201
     force_basic_auth: yes
   register: finish_cluster_result
