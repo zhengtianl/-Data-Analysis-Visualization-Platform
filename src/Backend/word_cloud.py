@@ -10,6 +10,8 @@ import couchdb
 from nltk.corpus import stopwords
 import requests
 import json
+nltk.download('punkt')
+nltk.download("stopwords")
 
 with open('sentiment.json', 'r') as json_file:
     # Read the contents of the file
