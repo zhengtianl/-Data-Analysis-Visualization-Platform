@@ -1,5 +1,12 @@
 ## Project Overview
+COMP90024 - Cluster and Cloud Computing - 2020 S1 - Project 2
 
+## Contributors
+Zhengtian Lu
+Xiaohan Guo
+Xueqing Zhang
+Mingyang Li
+Weihao Zhao
 
 ## Structure
 ├── [src/](https://github.com/zhengtianl/comp90024groupwork/blob/9e443f16204ebad055c398bb17c5c23876b74b1d/src)                       # src code
