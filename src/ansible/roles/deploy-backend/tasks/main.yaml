@@ -1,10 +1,15 @@
-- name: generate frontend configuration of backend
-  become:
-    yes
-  template:
-    src: ../FrontEnd/craco.config.js
-    dest: /data/wordpress/config/webpackDevServer.config.js
+- name: Copy frontend files to WordPress container
+  become: yes
+  copy:
+    src: ../Backend
+    dest: /data/wordpress
 
+- name: Restart WordPress
+  become: yes
+  shell: docker-compose restart wordpress
+  args:
+    chdir: /data/wordpress
+    
 - name: Shut down previous server
   become:
     yes

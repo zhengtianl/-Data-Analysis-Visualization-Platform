@@ -15,12 +15,3 @@
     dest: "/data/wordpress/docker-compose.yaml"
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
-
-- name: Run docker compose
-  become: true
-  community.docker.docker_compose:
-    project_src: "/data/wordpress"
-    pull: true
-    state: present
-    remove_orphans: true
-    recreate: always
