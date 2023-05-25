@@ -5,6 +5,7 @@ import couchdb
 import csv
 import requests
 import itertools
+import matplotlib.pyplot as plt
 
 with open('citycountkey.json', 'r') as json_file:
     # Read the contents of the file
@@ -94,13 +95,34 @@ def get_rate(doc_list, region):
                         rates.append(result)
     return rates
 
-
             
 
 
 
 
 # region_list = region(doc_list)
-# print(get_rate(doc_list, region_list))
-# num_alcohol = detect_alcohol(doc_list, region_list)
-# print(type(num_alcohol[1]['count']))
+# rate = get_rate(doc_list, region_list)
+
+# # num_alcohol = detect_alcohol(doc_list, region_list)
+# # print(type(num_alcohol[1]['count']))
+
+# # 根据"num_alcohol"值对数据进行排序，并获取前15个城市
+# top_cities = sorted(rate, key=lambda x: x['num_alcohol'], reverse=True)[:15]
+
+# # 提取选定城市的"x"和"y"值
+# x = [city['total_unemployment'] for city in top_cities]
+# y = [city['num_alcohol'] for city in top_cities]
+# city_names = [city['city'] for city in top_cities]
+
+# # 创建散点图，并添加城市标签
+# plt.scatter(x, y)
+# for i, city_name in enumerate(city_names):
+#     plt.text(x[i], y[i], city_name, fontsize=8, ha='left', va='bottom')
+
+# # 添加横轴和纵轴标签以及标题
+# plt.xlabel('Total Unemployment')
+# plt.ylabel('Number of Alcohol')
+# plt.title('Scatter Plot - Top 15 Cities by Number of Alcohol')
+# plt.savefig('scatter.png')
+# # 显示散点图
+# plt.show()
