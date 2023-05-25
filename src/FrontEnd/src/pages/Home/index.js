@@ -41,7 +41,7 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/wordcloud');
+        const response = await fetch('http://172.26.135.85:5000/wordcloud');
         const data = await response.json();
 
         const cleanWordListMas = data.clean_word_list_mas;
