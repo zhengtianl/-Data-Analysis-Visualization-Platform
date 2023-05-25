@@ -7,7 +7,7 @@ import Draggable from 'react-draggable';
 import Bar from '@/components/Bar';
 import { Select, Button} from 'antd';
 import './index.scss';
-
+import ScatterPlot from "@/components/Scatter"
 const Unemployment = () => {
   const [alcoholCount, setAlcoholCount] = useState([]);
   const [numberOfAlcoholCities, setNumberOfAlcoholCities] = useState(5);
@@ -172,6 +172,14 @@ const Unemployment = () => {
           </div>
         </div>
       </Draggable>
+
+
+      <Draggable>
+      <div className="chart-card">
+          <ScatterPlot></ScatterPlot>
+      </div>
+      </Draggable>
+      
     </div>
   );
 };
