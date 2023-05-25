@@ -1,4 +1,4 @@
-- name: Copy frontend files to WordPress container
+- name: Copy Backend files to WordPress container
   become: yes
   copy:
     src: ../Backend
