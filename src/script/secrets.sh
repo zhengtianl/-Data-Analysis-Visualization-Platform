@@ -5,3 +5,4 @@ curl --header "Authorization: Bearer ${MASTODON_ACCESS_TOKEN=}" \
      -XGET \
      -vvv \
   	 "${URL}/accounts/verify_credentials" | jq
+python3 Mastodon_upload.py
