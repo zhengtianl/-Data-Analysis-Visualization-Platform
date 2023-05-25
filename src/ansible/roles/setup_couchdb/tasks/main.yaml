@@ -14,6 +14,9 @@
     state: started
     ports:
       - "{{couchdb_port}}:{{couchdb_port}}"
+      - "9100:9100"
+      - "4369:4369"
+      - "5986:5986"
     env:
       COUCHDB_PASSWORD: "{{ couchdb_pass }}"
       COUCHDB_USER: "{{ couchdb_user }}"

@@ -2,7 +2,7 @@
   become: yes
   copy:
     src: ../Frontend
-    dest: /var/www/html
+    dest: /data/wordpress/frontend/Frontend
 
 - name: Restart WordPress
   become: yes
