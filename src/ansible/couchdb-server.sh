@@ -1,1 +1,0 @@
-. ~/unimelb-comp90024-2023-grp-42-openrc.sh; ansible-playbook --ask-become-pass couchdb-server.yaml -i inventory/hosts

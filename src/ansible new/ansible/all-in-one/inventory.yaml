@@ -1,6 +1,0 @@
-COMP90024TEAM42:
-  hosts:
-    instance01:
-      ansible_host: 172.26.133.182
-      ansible_user: ubuntu
-      ansible_ssh_private_key_file: ~/tek.pem

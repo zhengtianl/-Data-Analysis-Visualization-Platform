@@ -1,8 +1,0 @@
-- name: play1
-  hosts: COMP90024TEAM42
-  tasks:
-    - name: ping my hosts
-      ansible.builtin.ping:
-    - name: print message
-      ansible.builtin.debug:
-        msg: hello fuzi
